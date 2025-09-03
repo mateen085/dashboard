@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Modern Notes App</title>
+<style>
+  :root{
+    --bg-light:#f6f7fb;--bg-dark:#0b0c10;--panel-light:#ffffff;--panel-dark:#12141a;
+    --txt-light:#0f172a;--txt-dark:#e8eef9;--muted-light:#49566e;--muted-dark:#a8b3cf;
+    --radius:14px;--shadow:0 10px 30px rgba(0,0,0,.25);
+  }
+  body{margin:0;font-family:system-ui;background:var(--bg);color:var(--txt);}
+  body.light{--bg:var(--bg-light);--panel:var(--panel-light);--txt:var(--txt-light);--muted:var(--muted-light);}
+  body.dark{--bg:var(--bg-dark);--panel:var(--panel-dark);--txt:var(--txt-dark);--muted:var(--muted-dark);}
+  .app{display:flex;height:100vh;gap:12px;padding:12px;}
+  .sidebar{width:260px;background:var(--panel);border-radius:var(--radius);display:flex;flex-direction:column;}
+  .sidebar button{margin:6px;padding:10px;border:none;border-radius:8px;cursor:pointer;background:#ddd;}
+  .list{flex:1;overflow:auto;padding:10px;}
+  .note-card{padding:10px;background:rgba(0,0,0,.05);margin-bottom:8px;border-radius:10px;cursor:pointer;}
+  .main{flex:1;display:flex;flex-direction:column;gap:10px;}
+  .toolbar{display:flex;gap:10px;align-items:center;background:var(--panel);padding:10px;border-radius:var(--radius);}
+  .toolbar button{padding:8px 12px;cursor:pointer;}
+  .editor-area{flex:1;display:grid;grid-template-columns:1.2fr 1fr;gap:10px;}
+  .editor-section{display:flex;flex-direction:column;}
+  #title{width:100%;padding:10px;font-size:18px;margin-bottom:10px;}
+  textarea{flex:1;padding:10px;font-family:monospace;font-size:14px;resize:none;}
+  .preview{padding:14px;background:var(--panel);overflow:auto;border-radius:var(--radius);}
+  .cheatsheet{position:fixed;top:0;right:-400px;width:360px;height:100%;background:var(--panel);box-shadow:var(--shadow);padding:20px;overflow:auto;transition:right 0.3s;border-radius:14px 0 0 14px;z-index:100;}
+  .cheatsheet.open{right:0;}
+  .cheatsheet h3{margin-top:0;}
+  .cheatsheet pre{background:#222;color:#eee;padding:8px;border-radius:8px;overflow-x:auto;}
+  
+  @media(max-width:900px){.editor-area{grid-template-columns:1fr;}.sidebar{display:none;}}
+</style>
+</head>
+<body class="light">
+<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 10px;
+    position: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
+<div class="app">
+  <div class="sidebar">
+
+    <button id="newNote">New Note</button>
+    <button id="exportNotes">Export</button>
+    <input type="file" id="importNotes" accept="application/json" style="margin:6px;" />
+    <button id="printPdf">Print PDF</button>
+    <button id="themeToggle">Toggle Theme</button>
+    
+    <div class="list" id="noteList"></div>
+  </div>
+  <div class="main">
+    <div class="toolbar">
+      <input id="title" placeholder="Title" />
+      <button id="saveNote">Save</button>
+      <button id="deleteNote">Delete</button>
+    </div>
+    <div class="editor-area">
+      <div class="editor-section">
+        <textarea id="editor" placeholder="Write Markdown..."></textarea>
+      </div>
+      <div class="preview" id="preview">Preview</div>
+    </div>
+  </div>
+</div>
+
+<div class="cheatsheet" id="cheatsheet">
+  <h3>Markdown Cheatsheet</h3>
+  <p>Here are some common Markdown examples:</p>
+  <ul>
+    <li><b>Heading</b>: <pre># Heading 1\n## Heading 2</pre></li>
+    <li><b>Bold</b>: <pre>**bold text**</pre></li>
+    <li><b>Italic</b>: <pre>*italic text*</pre></li>
+    <li><b>List</b>: <pre>- item 1\n- item 2</pre></li>
+    <li><b>Link</b>: <pre>[title](https://example.com)</pre></li>
+  </ul>
+</div>
+<script>
+const storageKey='notes-app';
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+let notes=[],currentId=null;
+const sampleMarkdown = `# Welcome to Notes App\n\n## Features\n- **Bold text** with **double asterisks**\n- *Italic text* with single asterisks\n- Headings using #\n- Lists like this one\n\nEnjoy writing in Markdown!`;
+function load(){try{notes=JSON.parse(localStorage.getItem(storageKey))||[]}catch{notes=[]}
+if(notes.length===0){createSample();}else{renderList();select(notes[0].id);}}
+function persist(){localStorage.setItem(storageKey,JSON.stringify(notes));}
+function mdToHtml(md){if(!md)return'';md=md.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));md=md.replace(/^###### (.*$)/gim,'<h6>$1</h6>').replace(/^##### (.*$)/gim,'<h5>$1</h5>').replace(/^#### (.*$)/gim,'<h4>$1</h4>').replace(/^### (.*$)/gim,'<h3>$1</h3>').replace(/^## (.*$)/gim,'<h2>$1</h2>').replace(/^# (.*$)/gim,'<h1>$1</h1>').replace(/\*\*(.*?)\*\*/gim,'<b>$1</b>').replace(/\*(.*?)\*/gim,'<i>$1</i>').replace(/\n/g,'<br/>');return md;}
+function renderList(){const list=$('#noteList');list.innerHTML=notes.map(n=>`<div class='note-card' data-id='${n.id}'>${n.title}<br><small>${new Date(n.createdAt).toLocaleString()}</small></div>`).join('');$$('#noteList .note-card').forEach(el=>{el.onclick=()=>select(el.dataset.id);});}
+function select(id){currentId=id;const n=notes.find(x=>x.id===id);if(!n)return;$('#title').value=n.title;$('#editor').value=n.markdown;$('#preview').innerHTML=n.html;}
+function create(content=''){const n={id:Date.now()+"",title:'Untitled',markdown:content,html:mdToHtml(content),createdAt:Date.now()};notes.unshift(n);persist();renderList();select(n.id);}
+function createSample(){create(sampleMarkdown);notes[0].title='Markdown Example';}
+function update(){if(!currentId)return;const n=notes.find(x=>x.id===currentId);if(!n)return;n.title=$('#title').value||'Untitled';n.markdown=$('#editor').value;n.html=mdToHtml(n.markdown);persist();renderList();$('#preview').innerHTML=n.html;}
+function remove(){if(!currentId)return;notes=notes.filter(n=>n.id!==currentId);persist();renderList();$('#title').value='';$('#editor').value='';$('#preview').innerHTML='';}
+$('#editor').addEventListener('input',()=>{$('#preview').innerHTML=mdToHtml($('#editor').value);});
+$('#newNote').onclick=()=>create('');$('#saveNote').onclick=update;$('#deleteNote').onclick=remove;
+$('#exportNotes').onclick=()=>{const blob=new Blob([JSON.stringify(notes)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='notes.json';a.click();URL.revokeObjectURL(url);};
+$('#importNotes').onchange=e=>{const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{notes=JSON.parse(r.result)||[];persist();renderList();if(notes.length>0){select(notes[0].id);}}catch{alert('Invalid file');}};r.readAsText(file);};
+$('#printPdf').onclick=()=>{if(notes.length===0)return;const win=window.open('','PRINT','height=650,width=900');win.document.write('<html><head><title>Notes</title></head><body>'+notes.map(n=>`<h2>${n.title}</h2>${n.html}`).join('<hr/>')+'</body></html>');win.document.close();win.print();};
+$('#themeToggle').onclick=()=>{document.body.classList.toggle('dark');document.body.classList.toggle('light');};
+
+load();
+</script>
+</body>
+</html>
+
