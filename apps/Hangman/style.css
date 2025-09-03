@@ -1,0 +1,238 @@
+:root {
+            --font-family-main: 'Helvetica Neue', Arial, sans-serif;
+            --primary-bg-color: #f0f4f8; /* Light grey-blue */
+            --container-bg-color: #fff;
+            --text-color: #333;
+            --header-color: #c0392b; /* Reddish for Hangman theme */
+            --button-primary-bg: #2980b9; /* Blue */
+            --button-primary-hover-bg: #2471a3; /* Darker blue */
+            --button-secondary-bg: #7f8c8d; /* Grey */
+            --button-secondary-hover-bg: #6c7a7d;
+            --button-danger-bg: #e74c3c;
+            --button-danger-hover-bg: #c0392b;
+            --letter-btn-bg: #ecf0f1;
+            --letter-btn-text: #2c3e50;
+            --letter-btn-border: #bdc3c7;
+            --letter-btn-disabled-bg: #d2d7d9;
+            --letter-btn-disabled-text: #7f8c8d;
+            --correct-color: #2ecc71; /* Green */
+            --correct-border-color: #27ae60;
+            --incorrect-color: #e74c3c; /* Red */
+            --incorrect-border-color: #c0392b;
+            --hangman-draw-color: #34495e; /* Dark blue-grey */
+            --word-display-color: #2c3e50;
+            --border-radius-sm: 5px;
+            --border-radius-md: 10px;
+            --input-border-color: #ccc;
+        }
+
+        body {
+            font-family: var(--font-family-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--primary-bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            font-size: 16px;
+        }
+        .container {
+            background: var(--container-bg-color);
+            padding: 25px;
+            border-radius: var(--border-radius-md);
+            box-shadow: 0 6px 22px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 750px; 
+            text-align: center;
+        }
+        h1 {
+            color: var(--header-color);
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.2rem;
+            color: var(--hangman-draw-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            text-align: left;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid var(--input-border-color);
+            border-radius: var(--border-radius-sm);
+            box-sizing: border-box;
+            font-size: 0.95rem;
+        }
+        textarea {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 10px;
+            border-radius: var(--border-radius-sm);
+            border: 1px solid var(--letter-btn-border);
+            margin-bottom: 10px; /* Adjusted margin */
+            min-height: 120px; /* Slightly taller */
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+        .textarea-instruction {
+            font-size: 0.85rem;
+            color: #555;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+        button {
+            padding: 10px 18px;
+            background-color: var(--button-primary-bg);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.25s ease;
+            margin: 5px 3px;
+            vertical-align: middle;
+        }
+        button:hover:not(:disabled) {
+            background-color: var(--button-primary-hover-bg);
+        }
+        button:disabled {
+            background-color: var(--letter-btn-disabled-bg);
+            color: var(--letter-btn-disabled-text);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        button.secondary {
+            background-color: var(--button-secondary-bg);
+        }
+        button.secondary:hover:not(:disabled) {
+            background-color: var(--button-secondary-hover-bg);
+        }
+        button.danger {
+            background-color: var(--button-danger-bg);
+        }
+        button.danger:hover:not(:disabled) {
+            background-color: var(--button-danger-hover-bg);
+        }
+        button.small-btn {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            margin-left: 8px;
+        }
+
+        button.letter-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+            margin: 4px;
+            background-color: var(--letter-btn-bg);
+            color: var(--letter-btn-text);
+            border: 1px solid var(--letter-btn-border);
+        }
+        button.letter-btn.correct {
+            background-color: var(--correct-color);
+            color: white;
+            border-color: var(--correct-border-color);
+        }
+        button.letter-btn.incorrect {
+            background-color: var(--incorrect-color);
+            color: white;
+            border-color: var(--incorrect-border-color);
+        }
+
+        .input-section {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--letter-btn-border);
+        }
+        .input-section:last-of-type { /* No border for the last section */
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        #sample-lists-area p, #saved-lists-management p {
+             margin-bottom: 8px;
+             text-align: left;
+             font-weight: bold;
+        }
+        #sample-lists-area button {
+            background-color: #5dade2; 
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            margin: 3px;
+        }
+        #sample-lists-area button:hover:not(:disabled) {
+            background-color: #3498db;
+        }
+
+        #saved-lists-container {
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid var(--input-border-color);
+            padding: 10px;
+            border-radius: var(--border-radius-sm);
+            text-align: left;
+        }
+        .saved-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 5px;
+            border-bottom: 1px dotted var(--input-border-color);
+        }
+        .saved-list-item:last-child {
+            border-bottom: none;
+        }
+        .saved-list-item span { /* List name part */
+            cursor: pointer;
+            color: var(--button-primary-bg);
+            flex-grow: 1;
+            margin-right: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .saved-list-item span:hover {
+            text-decoration: underline;
+        }
+
+
+        #game-area { margin-top: 20px; }
+        #hangman-drawing {
+            width: 200px;
+            height: 250px;
+            border: 2px solid var(--hangman-draw-color);
+            margin: 0 auto 20px auto;
+            position: relative;
+            border-radius: var(--border-radius-sm);
+        }
+        .hangman-gallow { background-color: var(--hangman-draw-color); position: absolute; }
+        .hangman-body-part { position: absolute; display: none; }
+        #gallow-stand { bottom: 0; left: 30px; width: 10px; height: 248px; }
+        #gallow-top { top: 0; left: 30px; width: 120px; height: 10px; }
+        #gallow-rope { top: 0; left: 140px; width: 10px; height: 50px; }
+        #head { top: 48px; left: 118px; width: 50px; height: 50px; border-radius: 50%; border: 8px solid var(--hangman-draw-color); background-color: transparent; }
+        #body-line { top: 105px; left: 140px; width: 10px; height: 70px; background-color: var(--hangman-draw-color); }
+        #left-arm { top: 115px; left: 100px; width: 10px; height: 50px; transform: rotate(45deg); background-color: var(--hangman-draw-color); }
+        #right-arm { top: 115px; left: 180px; width: 10px; height: 50px; transform: rotate(-45deg); background-color: var(--hangman-draw-color); }
+        #left-leg { top: 165px; left: 100px; width: 10px; height: 60px; transform: rotate(30deg); background-color: var(--hangman-draw-color); }
+        #right-leg { top: 165px; left: 180px; width: 10px; height: 60px; transform: rotate(-30deg); background-color: var(--hangman-draw-color); }
+
+        #word-display { font-size: 2.2rem; letter-spacing: 8px; margin-bottom: 20px; color: var(--word-display-color); font-weight: bold; min-height: 40px; }
+        #hint-display { min-height: 22px; margin-bottom: 10px; font-style: italic; color: #555; font-size: 0.95rem; }
+        #letters-guessed { margin-bottom: 15px; min-height: 20px; font-size: 0.9rem; color: #555; }
+        #alphabet-buttons { margin-bottom: 20px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        #game-status { margin-top: 15px; font-size: 1.3rem; font-weight: bold; min-height: 30px; }
+        .win { color: var(--correct-color); }
+        .lose { color: var(--incorrect-color); }
+        .hidden { display: none !important; }
+

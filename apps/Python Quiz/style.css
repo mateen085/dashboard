@@ -1,0 +1,370 @@
+body {
+            font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            padding: 20px;
+            background-color: #eef2f6; /* A calm, light blue-grey */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px 35px;
+            border-radius: 12px;
+            box-shadow: 0 5px 28px rgba(0, 0, 0, 0.12);
+            width: 100%;
+            max-width: 700px; /* Wider for sentence questions */
+            text-align: left; /* Questions usually left-aligned */
+            margin-bottom: 20px; /* Space below the main container */
+        }
+        h1 {
+            color: #0d47a1; /* A deep, trustworthy blue */
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #1976d2; /* A standard blue */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+            margin: 8px 5px;
+        }
+        button:hover {
+            background-color: #1565c0; /* Slightly darker blue */
+        }
+        button:active {
+            transform: translateY(1px);
+        }
+        button.secondary {
+            background-color: #607d8b; /* Blue Grey */
+            color: white;
+        }
+        button.secondary:hover {
+            background-color: #546e7a;
+        }
+         button.danger {
+            background-color: #d32f2f; /* Red for delete */
+        }
+        button.danger:hover {
+            background-color: #c62828;
+        }
+        .start-button-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #game-area { margin-top: 20px; }
+        #question-text {
+            font-size: 1.4rem;
+            color: #212121; /* Darker text for question */
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #f5f5f5; /* Very light grey for question box */
+            border-left: 5px solid #1976d2; /* Accent border */
+            border-radius: 0 8px 8px 0;
+        }
+        #options-container button {
+            display: block; /* Each option on a new line */
+            width: 100%;
+            text-align: left;
+            background-color: #f9f9f9; /* Lighter option buttons */
+            color: #333;
+            border: 1px solid #e0e0e0; /* Light border */
+            margin-bottom: 10px;
+            padding: 14px 18px;
+        }
+        #options-container button:hover {
+            background-color: #e0e0e0; /* Hover effect */
+            border-color: #bdbdbd;
+        }
+        #options-container button.correct {
+            background-color: #4caf50 !important; /* Green */
+            color: white !important;
+            border-color: #388e3c !important;
+        }
+        #options-container button.incorrect {
+            background-color: #f44336 !important; /* Red */
+            color: white !important;
+            border-color: #d32f2f !important;
+        }
+        #options-container button.revealed-correct {
+            background-color: #0288d1 !important; /* Light blue for revealed */
+            color: white !important;
+            border-color: #0277bd !important;
+        }
+
+        #feedback {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .feedback-correct { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9;}
+        .feedback-incorrect { background-color: #ffebee; color: #c62828; border: 1px solid #ffcdd2;}
+        .feedback-final { background-color: #e3f2fd; color: #0d47a1; border: 1px solid #bbdefb;}
+
+        #score-area {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            text-align: center;
+            color: #424242;
+        }
+         #high-score-area {
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #0d47a1;
+         }
+         #timer-area {
+             font-size: 1.2rem;
+             font-weight: bold;
+             text-align: center;
+             margin-bottom: 15px;
+             /* color handled by JS based on time */
+         }
+
+        .hidden { display: none; }
+        .controls { text-align: center; margin-top: 25px; }
+
+        /* Styles for Question List Management */
+        #list-management-area {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        #list-management-area h2 {
+            text-align: center;
+            color: #0d47a1;
+            margin-bottom: 20px;
+        }
+         #list-selection {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #list-selection label {
+            font-size: 1.1rem;
+            margin-right: 10px;
+        }
+        #list-selection select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        #list-selection button {
+             margin-left: 10px;
+        }
+        #create-list-area {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+         #create-list-area h3 {
+             margin-top: 0;
+             color: #1976d2;
+         }
+         /* Removed styles for individual question inputs if they were specific */
+        /*
+        #create-list-area input[type="text"],
+        #create-list-area textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+         #add-question-btn, #update-question-btn {
+             display: block;
+             width: 100%;
+             background-color: #4caf50;
+             margin-bottom: 15px;
+         }
+         #add-question-btn:hover, #update-question-btn:hover {
+             background-color: #388e3c;
+         }
+         #update-question-btn {
+             background-color: #ff9800;
+         }
+         #update-question-btn:hover {
+             background-color: #f57c00;
+         }
+        */
+
+
+         #current-list-preview {
+             margin-top: 20px;
+             padding-top: 15px;
+             border-top: 1px dashed #ccc;
+         }
+         #current-list-preview h4 {
+             margin-top: 0;
+             color: #555;
+         }
+         #current-list-preview ul {
+             list-style: none;
+             padding: 0;
+         }
+         #current-list-preview li {
+             background-color: #fff;
+             padding: 10px;
+             border: 1px solid #eee;
+             margin-bottom: 10px;
+             border-radius: 4px;
+             position: relative; /* Keep if needed for future features, otherwise remove */
+             padding-right: 10px; /* Adjusted padding since edit/delete are removed */
+             word-wrap: break-word; /* Prevent long text overflowing */
+             overflow-wrap: break-word; /* Prevent long text overflowing */
+         }
+         /* Removed styles for preview item controls */
+          /*
+          .preview-item-controls {
+              position: absolute;
+              top: 5px;
+              right: 5px;
+              white-space: nowrap;
+          }
+          .preview-item-controls button {
+              padding: 3px 6px;
+              margin: 0 2px;
+              font-size: 0.8rem;
+          }
+          */
+
+         #current-list-preview li strong {
+             color: #1976d2;
+         }
+         .list-controls {
+             text-align: center;
+             margin-top: 20px;
+         }
+
+         /* End Game Summary Specific Styles */
+         #end-summary {
+             margin-top: 20px;
+             font-size: 1.1rem;
+             text-align: left; /* Align summary details left */
+             padding: 15px;
+             background-color: #fff;
+             border-radius: 8px;
+             border: 1px solid #e0e0e0;
+         }
+         #end-summary h4 {
+             text-align: center;
+             margin-top: 0;
+             color: #0d47a1;
+         }
+         #end-summary ul {
+             list-style: disc;
+             margin-left: 20px;
+             padding: 0;
+         }
+         #end-summary li {
+             margin-bottom: 8px;
+              word-wrap: break-word; /* Prevent long text overflowing */
+             overflow-wrap: break-word; /* Prevent long text overflowing */
+         }
+         #end-summary .correct-answer {
+             color: #2e7d32; /* Green */
+             font-weight: bold;
+         }
+         #end-summary .incorrect-answer {
+             color: #c62828; /* Red */
+             font-weight: bold;
+         }
+
+         /* Styles for Export/Import */
+         #export-import-area {
+             margin-top: 30px;
+             padding: 20px;
+             background-color: #f9f9f9;
+             border-radius: 8px;
+             border: 1px solid #e0e0e0;
+         }
+         #export-import-area h3 {
+             margin-top: 0;
+             color: #1976d2;
+         }
+         #export-import-area textarea {
+             width: calc(100% - 22px);
+             height: 150px;
+             padding: 10px;
+             margin-bottom: 15px;
+             border: 1px solid #ccc;
+             border-radius: 4px;
+             font-size: 0.9rem;
+             resize: vertical; /* Allow vertical resizing */
+         }
+          #import-file-input {
+              margin-bottom: 10px;
+          }
+
+
+        /* Basic Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            button {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            #question-text {
+                font-size: 1.2rem;
+                padding: 10px;
+            }
+            #options-container button {
+                padding: 12px 15px;
+                font-size: 0.95rem;
+            }
+            #score-area, #timer-area {
+                font-size: 1.1rem;
+            }
+            #list-selection button {
+                margin-left: 5px;
+                margin-right: 5px;
+            }
+            #create-list-area input[type="text"],
+            #create-list-area textarea,
+            #export-import-area textarea {
+                 width: calc(100% - 20px); /* Adjust width for smaller padding */
+            }
+            /* Removed responsiveness for preview item controls */
+            /*
+             .preview-item-controls {
+                 position: static;
+                 display: block;
+                 text-align: right;
+                 margin-top: 5px;
+                 padding-right: 0;
+                 white-space: normal;
+             }
+             */
+             #current-list-preview li {
+                 padding-right: 10px; /* Reset padding */
+             }
+             #end-summary li {
+                  word-wrap: break-word; /* Ensure wrapping */
+                 overflow-wrap: break-word;
+             }
+              #export-import-area button {
+                  display: block;
+                  width: 100%;
+                  margin: 8px 0;
+              }
+               #import-file-input {
+                   width: 100%; /* Make file input width 100% */
+               }
+        }

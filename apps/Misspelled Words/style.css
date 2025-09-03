@@ -1,0 +1,185 @@
+/* Existing CSS remains here */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px; /* Reduced margin slightly */
+        }
+         /* Added High Score style */
+        #high-score-area {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 20px; /* Added margin below high score */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            min-height: 80px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        select, input[type="number"], input[type="text"] {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            width: calc(100% - 18px);
+            box-sizing: border-box;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button.secondary {
+            background-color: #95a5a6;
+        }
+        button.secondary:hover {
+            background-color: #7f8c8d;
+        }
+         /* Added style to hide the start button */
+        button#start-game-btn.hidden {
+            display: none;
+        }
+        #game-area { margin-top: 20px; }
+        #word-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2980b9;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            word-break: break-word; /* Added for long words */
+        }
+        #options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .option-button {
+            padding: 10px 15px;
+            background-color: #e0f2f7;
+            color: #1a237e;
+            border: 1px solid #b3e5fc;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            word-break: break-word; /* Added for long options */
+        }
+        .option-button:hover {
+            background-color: #b3e5fc;
+        }
+        #feedback {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+        .correct-feedback { color: #27ae60; }
+        .incorrect-feedback { color: #c0392b; }
+        #score-area {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .hidden { display: none; }
+        .controls button { width: calc(50% - 10px); }
+        #timer-area {
+            font-size: 1rem;
+            color: #777;
+            margin-bottom: 10px;
+        }
+        #hint-area {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #777;
+        }
+        #list-management {
+            margin-top: 20px;
+            text-align: left;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+        #list-management label {
+            margin-top: 10px;
+        }
+        #saved-lists {
+            width: calc(100% - 18px);
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        .list-button-container {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        .list-button-container button {
+            padding: 8px 12px;
+            font-size: 0.9rem;
+        }
+        #settings-area {
+            text-align: left;
+        }
+        #settings-area label {
+            margin-top: 10px;
+        }
+        .sample-lists {
+            margin-top: 20px;
+            text-align: left;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+        .sample-lists button {
+            margin-right: 10px;
+        }
+        #customize-list-options {
+            margin-top: 20px;
+            text-align: left;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+        #customize-list-options label {
+            margin-top: 10px;
+        }

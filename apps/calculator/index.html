@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Modern Calculator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
+  <div class="calculator-container">
+    <div class="top-bar">
+      <button id="toggle-scientific">Scientific Mode</button>
+      <button id="toggle-history">History</button>
+    </div>
+    
+    <div id="expression-display">0</div>
+
+    <div id="display">0</div>
+    
+    <div class="buttons">
+      <div class="standard-buttons">
+        <button class="btn" data-action="ac">AC</button>
+        <button class="btn" data-action="c">C</button>
+        <button class="btn" data-action="sign">+/-</button>
+        <button class="btn operator" data-operator="/">÷</button>
+        
+        <button class="btn memory" data-action="mc">MC</button>
+        <button class="btn memory" data-action="mr">MR</button>
+        <button class="btn memory" data-action="mplus">M+</button>
+        <button class="btn memory" data-action="mminus">M-</button>
+
+        <button class="btn number">7</button>
+        <button class="btn number">8</button>
+        <button class="btn number">9</button>
+        <button class="btn operator" data-operator="*">×</button>
+
+        <button class="btn number">4</button>
+        <button class="btn number">5</button>
+        <button class="btn number">6</button>
+        <button class="btn operator" data-operator="-">−</button>
+
+        <button class="btn number">1</button>
+        <button class="btn number">2</button>
+        <button class="btn number">3</button>
+        <button class="btn operator" data-operator="+">+</button>
+
+        <button class="btn number">0</button>
+        <button class="btn" data-action="decimal">.</button>
+        <button class="btn equals" data-action="equals">=</button>
+        </div>
+
+      <div class="scientific-buttons hidden">
+        <button class="btn sci" data-operator="sin">sin</button>
+        <button class="btn sci" data-operator="cos">cos</button>
+        <button class="btn sci" data-operator="tan">tan</button>
+        <button class="btn sci" data-operator="sqrt">√</button>
+        <button class="btn sci" data-operator="^">^</button>
+        <button class="btn sci" data-operator="log">log</button>
+        <button class="btn sci" data-operator="ln">ln</button>
+        <button class="btn sci" data-operator="exp">exp</button>
+        <button class="btn sci" data-operator="(">(</button>
+        <button class="btn sci" data-operator=")">)</button>
+        <button class="btn sci" data-operator="pi">π</button>
+        <button class="btn sci" data-operator="e">e</button>
+      </div>
+    </div>
+
+    <div class="history-panel hidden">
+      <h3>History</h3>
+      <ul id="history-list"></ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

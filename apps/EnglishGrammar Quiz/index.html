@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EnglishGrammar Quiz</title> <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
+    <div class="container">
+        <h1>EnglishGrammar Quiz</h1> <div id="high-score-area">High Score: <span id="high-score">0</span></div>
+
+        <div id="start-area" class="start-button-container">
+            <p>Load a list & Test your knowledge!</p> <button id="start-quiz-btn">Start Quiz</button>
+        </div>
+
+        <div id="game-area" class="hidden">
+             <div id="timer-area"><span id="time">0</span>s</div>
+             <div id="question-text"></div>
+            <div id="options-container">
+                </div>
+            <div id="feedback"></div>
+            <div id="score-area">Question: <span id="question-number">0</span>/<span id="total-questions">0</span> | Score: <span id="score">0</span></div>
+             <div id="end-summary" class="hidden">
+                 <h4>Quiz Summary</h4>
+                 <p>Total Questions: <span id="summary-total"></span></p>
+                 <p>Correct: <span id="summary-correct" class="correct-answer"></span></p>
+                 <p>Incorrect: <span id="summary-incorrect" class="incorrect-answer"></span></p>
+                 <p>Timed Out: <span id="summary-timedout" class="incorrect-answer"></span></p>
+                  <div id="summary-missed-questions">
+                      <h5>Missed Questions:</h5>
+                      <ul>
+                          </ul>
+                  </div>
+             </div>
+            <div class="controls">
+                <button id="next-question-btn" class="hidden">Next Question</button>
+                 <button id="end-test-btn" class="secondary hidden">End Test</button> <button id="restart-game-btn" class="secondary hidden">Restart Game</button>
+                 <button id="play-again-same-list-btn" class="hidden">Play Again (Same List)</button>
+            </div>
+        </div>
+    </div>
+
+     <div class="container" id="list-management-area">
+         <h2>Manage Question Lists</h2>
+         <div id="list-selection">
+             <label for="question-list-select">Choose:</label>
+             <select id="question-list-select">
+                </select>
+             <button id="load-list-btn" class="secondary">Load List</button>
+             <button id="delete-list-btn" class="danger">Delete Selected List</button>
+         </div>
+
+         <div id="create-list-area">
+             <h3>Create New List (Import Only)</h3> <p>To create a new list, import a JSON file containing your questions.</p> <label for="new-list-name">List Name (for imported list):</label> <input type="text" id="new-list-name" placeholder="Enter name for new list">
+
+             <div id="current-list-preview">
+                 <h4>New List Preview (<span id="preview-list-name">Unnamed</span>)</h4>
+                 <ul id="preview-questions-list">
+                      <li>Questions will appear here after import.</li> </ul>
+             </div>
+
+             <div class="list-controls">
+                 <button id="save-new-list-btn">Save New List</button>
+                 <button id="clear-new-list-btn" class="secondary">Clear New List</button>
+             </div>
+         </div>
+
+          <div id="export-import-area">
+              <h3>Export / Import List</h3>
+               <p>Select a list above to export, or import a list from JSON text or file.</p> <button id="export-list-btn">Export Selected List</button>
+              <br>
+              <textarea id="import-export-json" placeholder="Paste list JSON here to import, or copy exported JSON from here."></textarea>
+              <button id="import-list-btn">Import List from JSON</button>
+               <button id="import-from-file-btn">Import from File</button>
+               <input type="file" id="import-file-input" accept="application/json" class="hidden">
+          </div>
+
+     </div>
+        <script src="script.js"></script>
+</body>
+</html>

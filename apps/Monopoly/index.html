@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Monopoly</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
+    <div class="game-container flex flex-col lg:flex-row items-center justify-center gap-4 p-4 w-full max-w-screen-xl mx-auto">
+        <div class="game-controls bg-white p-6 rounded-xl shadow-lg flex flex-col items-center gap-4 w-full lg:w-1/3 order-2 lg:order-1">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Kids Monopoly</h2>
+            <div id="player-info" class="w-full">
+                </div>
+
+            <div class="dice-container">
+                <div id="die1" class="die">1</div>
+                <div id="die2" class="die">1</div>
+            </div>
+
+            <button id="roll-dice-button" class="action-button w-full">Roll Dice</button>
+            <button id="manage-properties-button" class="action-button w-full mt-2 bg-purple-600 hover:bg-purple-700">Manage Properties</button>
+            <button id="next-turn-button" class="action-button w-full mt-2" disabled>Next Turn</button>
+            <button id="end-game-button" class="action-button w-full mt-2">End Game & Declare Winner</button>
+            <button id="new-game-button" class="action-button w-full mt-2">New Game</button>
+            <button id="rules-button" class="action-button w-full mt-2 bg-gray-600 hover:bg-gray-700">Show Rules</button>
+            <button id="settings-button" class="action-button w-full mt-2 bg-blue-600 hover:bg-blue-700">Game Settings</button>
+
+
+            <div class="game-log-container w-full">
+                <h3 class="text-lg font-semibold text-gray-700 mb-2">Game Log</h3>
+                <div id="game-log">
+                    </div>
+            </div>
+        </div>
+
+        <div class="game-board-container relative order-1 lg:order-2">
+            <div id="game-board" class="game-board">
+                </div>
+        </div>
+    </div>
+
+    <div id="game-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modal-title"></h3>
+            <p id="modal-message"></p>
+            <div id="modal-actions" class="modal-actions">
+                </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

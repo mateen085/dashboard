@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VocabularyBuilder</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Additional Styles for Improved UI */
+        body {
+            font-family: 'Arial', sans-serif;
+            /* More modern font */
+            background-color: #f4f6f8;
+            /* Lighter background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            /* Softer corners */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            /* More pronounced shadow */
+            padding: 30px;
+            width: 90%;
+            /* Responsive width */
+            max-width: 600px;
+            /* Maximum width */
+        }
+
+        h1 {
+            text-align: center;
+            color: #283149;
+            /* Darker, more readable header */
+            margin-bottom: 25px;
+            font-size: 2em;
+            /* Larger header */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #5b6978;
+            /* Muted label color */
+            font-weight: 500;
+            /* Slightly bolder labels */
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #d4dce6;
+            /* Thicker, softer border */
+            border-radius: 8px;
+            margin-bottom: 20px;
+            resize: vertical;
+            font-size: 1em;
+            /* Consistent font size */
+            font-family: inherit;
+        }
+
+        button {
+            padding: 14px 22px;
+            /* Larger buttons */
+            background-color: #5e60ce;
+            /* Vibrant button color */
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.2s ease;
+            /* Smoother transition */
+        }
+
+        button:hover {
+            background-color: #4c4f91;
+            /* Darker shade on hover */
+        }
+
+        button.secondary {
+            background-color: #a0a9ba;
+        }
+
+        button.secondary:hover {
+            background-color: #8993a4;
+        }
+
+        button.danger {
+            background-color: #e4572e;
+        }
+
+        button.danger:hover {
+            background-color: #bb4522;
+        }
+
+        #quiz-area {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eaeaea;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        #timer {
+            font-size: 1.2em;
+            color: #d9534f;
+            font-weight: bold;
+        }
+
+        .question {
+            font-size: 1.5em;
+            color: #343a40;
+            /* Dark grey question text */
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            /* Slightly bolder question */
+        }
+
+        .options button {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 10px;
+            border: 2px solid #e9ecef;
+            /* Thicker option borders */
+            border-radius: 8px;
+            text-align: left;
+            background-color: white;
+            color: #495057;
+            /* Darker option text */
+            font-size: 1em;
+        }
+
+        .options button:hover {
+            background-color: #f8f9fa;
+        }
+
+        .options button.correct {
+            background-color: #28a745 !important;
+            border-color: #28a745 !important;
+            color: white !important;
+        }
+
+        .options button.incorrect {
+            background-color: #dc3545 !important;
+            border-color: #dc3545 !important;
+            color: white !important;
+        }
+
+        .options button.revealed-correct {
+            background-color: #17a2b8 !important;
+            border-color: #17a2b8 !important;
+            color: white !important;
+        }
+
+        #feedback {
+            margin-top: 20px;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+
+        #feedback.correct-feedback {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        #feedback.incorrect-feedback {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        #feedback.info-feedback {
+            background-color: #cce5ff;
+            color: #004085;
+            border: 1px solid #b8daff;
+        }
+
+        .score-section {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #212529;
+            /* Darker score text */
+        }
+
+        #high-score-display {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+
+        .quiz-controls {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .settings {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #e9ecef;
+        }
+
+        .settings label {
+            margin-right: 10px;
+            color: #495057;
+        }
+
+        .settings select,
+        .settings input[type="number"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            margin-right: 20px;
+            font-size: 1em;
+        }
+
+        .predefined-lists {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid #e9ecef;
+        }
+
+        .predefined-lists h3 {
+            margin-top: 0;
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .predefined-lists button {
+            margin: 5px;
+        }
+
+        .user-lists-manager {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid #e9ecef;
+        }
+
+        .user-lists-manager h3 {
+            margin-top: 0;
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .user-lists-manager label {
+            margin-bottom: 5px;
+            color: #495057;
+        }
+
+        .user-lists-manager input[type="text"],
+        .user-lists-manager select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .user-lists-manager button {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
+    <div class="container">
+        <h1>VocabularyBuilder</h1>
+
+        <div id="input-area">
+            <div class="settings">
+                <label for="quiz-mode">Quiz Mode:</label>
+                <select id="quiz-mode">
+                    <option value="word-to-meaning" selected>Word to Meaning</option>
+                    <option value="meaning-to-word">Meaning to Word</option>
+                </select>
+
+                <label for="time-limit">Time per Question (seconds, 0 for no limit):</label>
+                <input type="number" id="time-limit" value="15" min="0" max="120">
+            </div>
+
+            <div class="predefined-lists">
+                <h3>Sample Lists</h3>
+                <button class="secondary" data-list="common">Common Words</button>
+                <button class="secondary" data-list="advanced">Advanced Vocabulary</button>
+                <button class="secondary" data-list="science">Science Terms</button>
+            </div>
+
+            <label for="word-list">Enter words (one word:meaning per line):</label>
+            <textarea id="word-list"
+                placeholder="e.g., ephemeral:lasting for a very short time&#10;ubiquitous:present, appearing, or found everywhere&#10;serendipity:the occurrence and development of events by chance in a happy or beneficial way"></textarea>
+
+			<button id="start-quiz-btn">Start Quiz</button>
+            <div id="high-score-display">High Score: <span id="high-score">0</span>
+                <button id="clear-hs-btn" class="secondary" style="margin-left: 10px; padding: 5px 10px; font-size: 0.8rem;">Clear HS</button>
+            </div>
+
+            <div class="user-lists-manager">
+                <h3>Create/edit Lists</h3>
+                <label for="save-list-name">Name Your List:</label>
+                <input type="text" id="save-list-name" placeholder="e.g., My Week 1 Vocab">
+                <button id="save-list-btn" class="secondary">Save Current List</button>
+
+                <label for="saved-lists-select">Load or Manage Saved Lists:</label>
+                <select id="saved-lists-select">
+                    <option value="">-- Select a list to load or delete --</option>
+                </select>
+                <div style="display: flex; gap: 10px;">
+                    <button id="load-list-btn" class="secondary" style="flex: 1;">Load List</button>
+                    <button id="delete-list-btn" class="danger" style="flex: 1;">Delete List</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="quiz-area" class="hidden">
+            <div class="question-header">
+                <div id="question-counter">Question: <span id="current-q-number">0</span>/<span id="total-q-number">0</span></div>
+                <div id="timer">Time: 0s</div>
+            </div>
+            <div id="question-container">
+                <p class="question" id="question-text"></p>
+                <div class="options" id="options-container">
+                </div>
+            </div>
+            <div id="feedback"></div>
+            <div class="score-section">Score: <span id="score">0</span></div>
+
+            <div class="quiz-controls">
+                <button id="next-question-btn" class="hidden">Next Question</button>
+                <button id="restart-quiz-btn" class="secondary hidden">Restart Quiz</button>
+                <button id="new-list-btn" class="secondary hidden">New List / Settings</button>
+            </div>
+        </div>
+    </div>
+    <script src="myscript.js"></script>
+</body>
+
+</html>

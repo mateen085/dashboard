@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jumble Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
+    <main class="container">
+        <h1>Jumble Game</h1>
+        <div id="high-score-display">
+            High Score (Words): <span id="hs-words">0</span> | High Score (Sentences): <span id="hs-sentences">0</span>
+        </div>
+
+        <section id="input-area">
+            <div class="input-group">
+                <label for="game-mode-select">Select Game Mode:</label>
+                <select id="game-mode-select">
+                    <option value="words">Jumble Words</option>
+                    <option value="sentences">Jumble Sentences</option>
+                </select>
+            </div>
+
+			<div class="input-group">
+                <label for="timer-setting">Time per item (seconds):</label>
+                <input type="number" id="timer-setting" value="30" min="5">
+            </div>
+
+            <div class="input-group">
+                <label for="item-list" id="item-list-label">Enter your word list (one item per line):</label>
+                <textarea id="item-list" placeholder="e.g., for Words: planet, observe..."></textarea>
+            </div>
+
+            <div class="list-management">
+                <button id="load-sample-words-1" class="secondary">Sample Words 1</button>
+                <button id="load-sample-words-2" class="secondary">Sample Words 2</button>
+                <button id="load-sample-sentences-1" class="secondary">Sample Sentences 1</button>
+                <button id="load-sample-sentences-2" class="secondary">Sample Sentences 2</button>
+                <button id="save-list-btn" class="secondary">Save Current List</button>
+            </div>
+            <div class="input-group">
+                 <label for="saved-lists-select">Load Saved List:</label>
+                 <select id="saved-lists-select">
+                    <option value="">-- Select a saved list --</option>
+                 </select>
+                 <button id="delete-list-btn" class="secondary">Delete Selected List</button>
+            </div>
+
+            <button id="start-game-btn">Start Puzzling</button>
+        </section>
+
+        <button id="restart-game-btn" class="secondary">New List / Mode</button>
+
+
+        <section id="game-area" class="hidden">
+            <div id="timer-display">00:30</div>
+            <div id="jumbled-display" aria-live="polite" aria-atomic="true"></div>
+            <div id="hint-area">
+                <span id="hint-text"></span>
+                <button id="hint-btn" class="secondary">Get Hint</button>
+            </div>
+            <input type="text" id="guess-input" placeholder="Your guess...">
+            <button id="submit-guess-btn">Unscramble!</button>
+            <div id="feedback" aria-live="polite"></div>
+            <div id="score-area" aria-live="polite">Score: <span id="score">0</span> | Item <span id="attempt-number">0</span>/<span id="total-attempts">0</span></div>
+            <button id="next-item-btn" class="hidden secondary">Next Item</button>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

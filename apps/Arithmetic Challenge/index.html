@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arithmetic Challenge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
+
+    <div class="container">
+        <h1>Arithmetic Challenge</h1>
+
+        <div id="settings-screen" class="screen active">
+            <h2>Game Settings</h2>
+            <div class="setting-group">
+                <h3>Operations:</h3>
+                <label><input type="checkbox" id="add-op" checked> Addition (+)</label>
+                <label><input type="checkbox" id="subtract-op"> Subtraction (-)</label>
+                <label><input type="checkbox" id="multiply-op"> Multiplication (*)</label>
+                <label><input type="checkbox" id="divide-op"> Division (/)</label>
+            </div>
+            <div class="setting-group">
+                <h3>Number Digits:</h3>
+                <label><input type="radio" name="digits" value="one" checked> One Digit</label>
+                <label><input type="radio" name="digits" value="two"> Two Digits</label>
+                <label><input type="radio" name="digits" value="two-one"> Two Digits & One Digit</label>
+            </div>
+            <div class="setting-group">
+                <h3>Answer Mode:</h3>
+                <label><input type="radio" name="answerMode" value="type" checked> Type Answer</label>
+                <label><input type="radio" name="answerMode" value="mcq"> Multiple Choice</label>
+            </div>
+            <div class="setting-group">
+                <h3>Game Time:</h3>
+                <label><input type="radio" name="gameTime" value="60"> 1 Minute</label>
+                <label><input type="radio" name="gameTime" value="120"> 2 Minutes</label>
+                <label><input type="radio" name="gameTime" value="180" checked> 3 Minutes</label>
+                <label><input type="radio" name="gameTime" value="300"> 5 Minutes</label>
+            </div>
+            <button id="start-game-btn" class="btn">Start Game</button>
+        </div>
+
+        <div id="game-screen" class="screen">
+            <div class="game-info">
+                <span id="timer">Time: 03:00</span>
+                <span id="score">Correct: 0 | Wrong: 0</span>
+            </div>
+            <div class="question-area">
+                <p id="question"></p>
+                <div id="type-answer-area">
+                    <input type="number" id="answer-input" placeholder="Your Answer" autocomplete="off">
+                    <button id="submit-answer-btn" class="btn">Submit</button>
+                </div>
+                <div id="mcq-options-area" class="options-container">
+                </div>
+            </div>
+            <p id="feedback"></p>
+            <div class="game-controls">
+                <button id="end-game-interrupt-btn" class="btn btn-red">End Game</button>
+                <button id="restart-game-btn" class="btn btn-orange">Restart Game</button>
+            </div>
+        </div>
+
+        <div id="result-screen" class="screen">
+            <h2>Game Over!</h2>
+            <p>Time's up! Let's see how you did.</p>
+            <p>Total Correct Answers: <span id="final-correct">0</span></p>
+            <p>Total Wrong Answers: <span id="final-wrong">0</span></p>
+            <button id="play-again-btn" class="btn">Play Again</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

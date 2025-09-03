@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zikr / Azkaar App</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
+    <div class="container">
+        <h1>Zikr / Azkaar App</h1>
+
+        <div class="controls">
+            <button id="prevBtn" class="nav-btn">&larr; Previous</button>
+            <div class="font-size-controls">
+                <button id="decreaseFont" class="font-btn">A-</button>
+                <button id="increaseFont" class="font-btn">A+</button>
+            </div>
+            <button id="nextBtn" class="nav-btn">Next &rarr;</button>
+        </div>
+
+        <div class="azkaar-display">
+            <p id="arabicText" class="arabic"></p>
+            <p class="recitation-info">Recite: <span id="reciteCount"></span> times</p>
+        </div>
+
+        <div class="counter-section">
+            <div id="counter" class="counter-circle">0</div>
+            <button id="resetBtn" class="action-btn">Reset Counter</button>
+        </div>
+
+        <button id="learnMoreBtn" class="action-btn secondary-btn">Learn More</button>
+
+        <div id="hadithDetails" class="hadith-details hidden">
+            <h3>Hadith Details:</h3>
+            <p id="hadithContent"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

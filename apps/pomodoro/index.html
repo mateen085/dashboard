@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Pomodoro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #660033;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: white;
+            margin: 0;
+        }
+        .tomato {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #ff6b6b, #d63030);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            position: relative;
+            box-shadow: 0 0 20px rgba(214, 48, 48, 0.7);
+        }
+        .tomato::before {
+            content: "";
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25px;
+            height: 25px;
+            background: #3d993d;
+            border-radius: 50%;
+            z-index: 10;
+        }
+        .tomato::after {
+            content: "";
+            position: absolute;
+            top: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5px;
+            height: 25px;
+            background: #2d7d2d;
+            border-radius: 3px;
+            z-index: 10;
+        }
+        #session {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+           -shadow: 1px 1px px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+        #timer {
+            font-size: 60px;
+            font-weight: bold;
+            margin: 10px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            z-index: 2;
+        }
+        button {
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        button:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        #settings {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 25px;
+            border-radius: 15px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        #settings h2 {
+            margin-top: 0;
+            color: #d63030;
+        }
+        #settings label {
+            display: block;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        #settings input {
+            width: 80px;
+            padding: 8px;
+            font-size: 16px;
+            border: 2px solid #ff3737;
+            border-radius: 8px;
+            text-align: center;
+        }
+        #save {
+            background: #ff3737;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        #save:hover {
+            background: #ff6666;
+        }
+    </style>
+</head>
+<body>
+<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
+    <h1>Simple Timer</h1>
+    
+    <div class="tomato">
+        <div id="session">WORK TIME</div>
+        <div id="timer">25:00</div>
+        <div class="controls">
+            <button id="start">Start</button>
+            <button id="stop" disabled>Stop</button>
+            <button id="reset">Reset</button>
+        </div>
+    </div>
+    
+    <div id="settings">
+        <h2>Settings</h2>
+        <label>Work Minutes: <input type="number" id="work" value="1" min="1"></label>
+        <label>Break Minutes: <input type="number" id="break" value="1" min="1"></label>
+        <button id="save">Save Settings</button>
+    </div>
+
+    <script>
+        let workMinutes = 1; // Set to 1 minute for easier testing
+        let breakMinutes = 1; // Set to 1 minute for easier testing
+        let secondsLeft = workMinutes * 60;
+        let timerInterval = null;
+        let isWorkSession = true;
+        let isRunning = false;
+
+        const startBtn = document.getElementById('start');
+        const stopBtn = document.getElementById('stop');
+        const resetBtn = document.getElementById('reset');
+        const sessionDisplay = document.getElementById('session');
+        const timerDisplay = document.getElementById('timer');
+        const workInput = document.getElementById('work');
+        const breakInput = document.getElementById('break');
+        const saveBtn = document.getElementById('save');
+        const settingsDiv = document.getElementById('settings');
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(secondsLeft / 60);
+            const seconds = secondsLeft % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateSessionDisplay() {
+            sessionDisplay.textContent = isWorkSession ? 'WORK TIME' : 'BREAK TIME';
+            sessionDisplay.style.color = isWorkSession ? 'white' : '#ffeb3b';
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+            isRunning = true;
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            settingsDiv.style.display = 'none';
+            
+            timerInterval = setInterval(() => {
+                secondsLeft--;
+                updateTimerDisplay();
+                
+                if (secondsLeft <= 0) {
+                    clearInterval(timerInterval);
+                    isRunning = false;
+                    
+                    if (isWorkSession) {
+                        alert('Work time is over! Take a break.');
+                        isWorkSession = false;
+                        secondsLeft = breakMinutes * 60;
+                    } else {
+                        alert('Break time is over! Back to work.');
+                        isWorkSession = true;
+                        secondsLeft = workMinutes * 60;
+                    }
+                    
+                    updateSessionDisplay();
+                    updateTimerDisplay();
+                    startTimer(); // Auto-restart
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (!isRunning) return;
+            clearInterval(timerInterval);
+            isRunning = false;
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            settingsDiv.style.display = 'block';
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            isWorkSession = true;
+            secondsLeft = workMinutes * 60;
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            settingsDiv.style.display = 'block';
+            updateTimerDisplay();
+            updateSessionDisplay();
+        }
+
+        function saveSettings(e) {
+            e.preventDefault();
+            const newWork = parseInt(workInput.value);
+            const newBreak = parseInt(breakInput.value);
+            
+            if (newWork > 0 && newBreak > 0 && !isNaN(newWork) && !isNaN(newBreak)) {
+                workMinutes = newWork;
+                breakMinutes = newBreak;
+                
+                if (!isRunning) {
+                    secondsLeft = workMinutes * 60;
+                    isWorkSession = true;
+                    updateTimerDisplay();
+                    updateSessionDisplay();
+                }
+                
+                alert(`Settings saved!\nWork Time: ${workMinutes} minutes\nBreak Time: ${breakMinutes} minutes`);
+            } else {
+                alert('Please enter valid positive numbers for both work and break times.');
+            }
+        }
+
+        // Initialize
+        updateTimerDisplay();
+        updateSessionDisplay();
+
+        // Event listeners
+        startBtn.addEventListener('click', startTimer);
+        stopBtn.addEventListener('click', stopTimer);
+        resetBtn.addEventListener('click', resetTimer);
+        saveBtn.addEventListener('click', saveSettings);
+
+        // Prevent form submission
+        document.getElementById('settings').addEventListener('submit', function(e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 15px; /* Reduce overall body margin */
+    background-color: #1e1e1e; /* Dark background */
+    color: #d4d4d4; /* Light text */
+    font-size: 0.9em; /* Slightly smaller base font size */
+    line-height: 1.6; /* Improve readability */
+}
+
+.container {
+    max-width: 95%; /* Adjust as needed */
+    margin: 2% auto; /* Adjust top/bottom margin as needed */
+    background-color: #252526; /* Darker container */
+    padding: 20px; /* Reduce padding for smaller screens */
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+h1, h2 {
+    color: #61afef; /* Cyan heading */
+    text-align: center;
+    margin-bottom: 20px; /* Reduce margin */
+}
+
+h1 {
+    font-size: 1.8em; /* Adjust heading size */
+}
+
+h2 {
+    font-size: 1.4em; /* Adjust subheading size */
+}
+
+.settings-section, .student-edit-section, .attendance-section, .past-attendance-section, .notes-section, .calendar-section, .export-section {
+    margin-bottom: 20px; /* Reduce margin */
+    padding: 20px; /* Reduce padding */
+    border: 1px solid #3b3b3b; /* Dark border */
+    border-radius: 8px;
+    background-color: #2c2c2d; /* Darker section background */
+}
+
+label {
+    display: block;
+    margin-bottom: 6px; /* Reduce margin */
+    font-weight: bold;
+    color: #9cdcfe; /* Light blue label */
+    font-size: 1em; /* Maintain label size */
+}
+
+input[type="text"], textarea, input[type="date"] {
+    width: calc(100% - 20px); /* Adjust padding calculation */
+    padding: 12px; /* Slightly increase padding for better touch */
+    margin-bottom: 12px; /* Slightly reduce margin */
+    border: 1px solid #565656; /* Darker input border */
+    border-radius: 6px;
+    box-sizing: border-box;
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    font-size: 1em; /* Ensure readable font size */
+}
+
+button {
+    padding: 8px 15px; /* Adjust button padding */
+    margin-right: 8px; /* Reduce margin */
+    border: none;
+    border-radius: 6px;
+    background-color: #61afef; /* Cyan button */
+    color: #282c34; /* Dark button text */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 0.9em; /* Adjust button text size */
+}
+
+button:hover {
+    background-color: #3b82bd; /* Darker cyan hover */
+}
+
+.student-list {
+    list-style: none;
+    padding: 0;
+}
+
+.student-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0; /* Adjust padding */
+    border-bottom: 1px solid #3b3b3b;
+}
+
+.student-item:last-child {
+    border-bottom: none;
+}
+
+.student-name {
+    flex-grow: 1;
+    color: #d4d4d4;
+    font-size: 0.9em;
+}
+
+.absent {
+    color: #f44747; /* Red absent */
+    font-style: italic;
+}
+
+.attendance-controls button {
+    margin-left: 6px; /* Reduce margin between buttons */
+    padding: 6px 12px; /* Adjust padding of attendance buttons */
+    font-size: 0.85em; /* Adjust size of attendance buttons */
+}
+
+.attendance-controls .present {
+    background-color: #98c379; /* Green present */
+    color: #282c34;
+}
+
+.attendance-controls .absent-btn {
+    background-color: #e06c75; /* Red absent button */
+    color: #282c34;
+}
+
+#add-student-input {
+    width: calc(65% - 20px); /* Adjust width for the input field */
+}
+
+.calendar {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.calendar th, .calendar td {
+    border: 1px solid #3b3b3b;
+    padding: 8px; /* Reduce calendar cell padding */
+    text-align: center;
+    font-size: 0.8em; /* Adjust calendar font size */
+}
+
+.calendar th {
+    background-color: #2c2c2d;
+    color: #d4d4d4;
+    font-weight: bold;
+}
+
+.calendar td {
+    cursor: pointer;
+}
+
+.class-day {
+    background-color: #98c379; /* Green class day */
+    color: #282c34;
+}
+
+.holiday {
+    background-color: #e06c75; /* Red holiday */
+    color: #282c34;
+}
+
+.no-class {
+    background-color: #5c6370; /* Gray no class */
+    color: #d4d4d4;
+}
+
+#current-date {
+    text-align: center;
+    margin-bottom: 15px; /* Reduce margin */
+    font-weight: bold;
+    color: #d4d4d4;
+    font-size: 1em; /* Adjust date font size */
+}
+
+.button-group {
+    text-align: center;
+    margin-top: 15px; /* Reduce margin */
+}
+
+.button-group button {
+    margin: 0 8px 10px 8px; /* Add some bottom margin for spacing */
+    font-size: 0.9em; /* Adjust button group text size */
+}
+
+.calendar-info {
+    text-align: left;
+    padding: 8px; /* Reduce padding */
+    font-size: 0.8em; /* Adjust calendar info font size */
+    color: #abb2bf;
+}
+
+.calendar-info span {
+    display: inline-block;
+    width: 18px; /* Slightly smaller color boxes */
+    height: 18px; /* Slightly smaller color boxes */
+    margin-right: 4px; /* Reduce margin */
+    border-radius: 4px;
+}
+
+.past-attendance-controls {
+    margin-bottom: 12px; /* Reduce margin */
+    text-align: center;
+}
+
+.past-attendance-list {
+    list-style: none;
+    padding: 0;
+}
+
+.past-attendance-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0; /* Adjust padding */
+    border-bottom: 1px solid #3b3b3b;
+    font-size: 0.9em;
+}
+
+.past-attendance-item:last-child {
+    border-bottom: none;
+}
+
+.attendance-status {
+    font-weight: bold;
+}
+
+.present-status {
+    color: #98c379;
+}
+
+.absent-status {
+    color: #e06c75;
+}
+
+/* Media query for screens with a maximum width of 600px (typical for phones) */
+@media (max-width: 600px) {
+    body {
+        margin: 10px;
+        font-size: 0.85em;
+    }
+
+    .container {
+        padding: 15px;
+        margin: 5% auto;
+    }
+
+    h1 {
+        font-size: 1.6em;
+        margin-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+    }
+
+    .settings-section, .student-edit-section, .attendance-section, .past-attendance-section, .notes-section, .calendar-section, .export-section {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-size: 0.95em;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"], textarea, input[type="date"] {
+        padding: 10px;
+        margin-bottom: 10px;
+        font-size: 0.95em;
+    }
+
+    button {
+        padding: 6px 12px;
+        margin-right: 5px;
+        font-size: 0.8em;
+    }
+
+    #add-student-input {
+        width: calc(60% - 15px);
+    }
+
+    .attendance-controls button {
+        padding: 5px 10px;
+        margin-left: 4px;
+        font-size: 0.75em;
+    }
+
+    .student-name {
+        font-size: 0.9em;
+    }
+
+    .calendar th, .calendar td {
+        padding: 6px;
+        font-size: 0.7em;
+    }
+
+    #current-date {
+        font-size: 0.9em;
+        margin-bottom: 10px;
+    }
+
+    .button-group {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .button-group button {
+        display: block; /* Stack buttons on smaller screens */
+        width: 100%;
+        margin: 5px 0;
+        font-size: 0.9em;
+    }
+
+    .calendar-info {
+        font-size: 0.75em;
+        padding: 6px;
+    }
+
+    .past-attendance-item {
+        font-size: 0.9em;
+        padding: 8px 0;
+    }
+}

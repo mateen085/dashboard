@@ -1,0 +1,90 @@
+/* Custom styles for the game */
+        body {
+            font-family: 'Inter', sans-serif; /* Using Inter font */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f3f4f6; /* Light gray background */
+            margin: 0;
+            padding: 1rem;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem; /* Increased gap for better visual separation */
+            width: 100%;
+            max-width: 300px; /* Max width for the board */
+            aspect-ratio: 1 / 1; /* Maintain square aspect ratio */
+            background-color: #4b5563; /* Darker gray for board background */
+            padding: 0.75rem;
+            border-radius: 0.75rem; /* Rounded corners for the board */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .cell {
+            background-color: #f9fafb; /* Lighter cell background */
+            border: 1px solid #d1d5db; /* Light border for cells */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem; /* Larger font for X and O */
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 0.5rem; /* Rounded corners for cells */
+            transition: background-color 0.2s ease-in-out;
+            color: #1f2937; /* Dark text color */
+            min-height: 80px; /* Minimum height for touch targets */
+        }
+        .cell:hover {
+            background-color: #e5e7eb; /* Slightly darker on hover */
+        }
+        .cell.x {
+            color: #ef4444; /* Red for X */
+        }
+        .cell.o {
+            color: #3b82f6; /* Blue for O */
+        }
+        .status-message {
+            margin-bottom: 1.5rem; /* Increased margin */
+            font-size: 1.5rem; /* Larger status message */
+            font-weight: 600;
+            color: #374151; /* Dark gray text */
+            text-align: center;
+            min-height: 2.25rem; /* Ensure space for message */
+        }
+        .restart-button {
+            margin-top: 1.5rem;
+            padding: 0.75rem 1.5rem; /* Increased padding */
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background-color: #2563eb; /* Blue button */
+            border: none;
+            border-radius: 0.5rem; /* Rounded corners */
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .restart-button:hover {
+            background-color: #1d4ed8; /* Darker blue on hover */
+        }
+        .winning-cell {
+            background-color: #a7f3d0 !important; /* Light green for winning cells */
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 640px) { /* sm breakpoint */
+            .board {
+                max-width: 400px;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            .cell {
+                font-size: 4rem;
+                min-height: 100px;
+            }
+            .status-message {
+                font-size: 1.75rem;
+            }
+        }

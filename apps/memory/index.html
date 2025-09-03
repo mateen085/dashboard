@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Memory Game</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 2px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
+  <div class="container" style="margin: 10px;">
+    <header>
+      <h1>Memory Game</h1>
+      <div class="controls">
+        <select id="difficulty">
+          <option value="easy">Easy (4x4)</option>
+          <option value="medium">Medium (6x6)</option>
+          <option value="hard">Hard (8x8)</option>
+        </select>
+        <button id="startBtn">Start Game</button>
+        <div class="timer">Time: <span id="time">00:00</span></div>
+        <button id="themeToggle" class="theme-toggle">🌙 Dark Mode</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Confetti Canvas (hidden until win) -->
+      <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+
+      <div id="game-board" class="game-board" aria-live="polite"></div>
+    </main>
+
+    <footer>
+      <div class="stats">
+        <h3>Statistics</h3>
+        <p>Wins: <span id="wins">0</span> | Losses: <span id="losses">0</span></p>
+        <p>Best Times:</p>
+        <ul class="best-times">
+          <li>Easy: <span id="best-easy">--</span></li>
+          <li>Medium: <span id="best-medium">--</span></li>
+          <li>Hard: <span id="best-hard">--</span></li>
+        </ul>
+
+        <div class="leaderboards">
+          <h3>Top 5 Leaderboard</h3>
+          <div class="lb-grid">
+            <div class="lb-card">
+              <h4>Easy</h4>
+              <ol id="lb-easy" class="lb-list"><!-- filled by JS --></ol>
+            </div>
+            <div class="lb-card">
+              <h4>Medium</h4>
+              <ol id="lb-medium" class="lb-list"><!-- filled by JS --></ol>
+            </div>
+            <div class="lb-card">
+              <h4>Hard</h4>
+              <ol id="lb-hard" class="lb-list"><!-- filled by JS --></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Win Modal -->
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-content">
+      <h2 id="modal-title">Congratulations! 🎉</h2>
+      <p>You completed the game in <strong><span id="final-time"></span></strong>.</p>
+      <p id="rank-line" class="rank-line"></p>
+      <div class="modal-actions">
+        <button id="closeModal">Close</button>
+        <button id="playAgain">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sound Effects (add your files in /sounds) -->
+  <audio id="flip-sound" src="sounds/flip.mp3" preload="auto"></audio>
+  <audio id="match-sound" src="sounds/match.mp3" preload="auto"></audio>
+  <audio id="win-sound" src="sounds/win.mp3" preload="auto"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Canvas Art Studio Pro</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
+  <div class="app-container" style ="margin:30px">
+    <h1>🖌️ Canvas Art Studio Pro</h1>
+
+    <div class="toolbar">
+      <select id="tool">
+        <option value="brush">Brush</option>
+        <option value="line">Line</option>
+        <option value="rectangle">Rectangle</option>
+        <option value="circle">Circle</option>
+        <option value="ellipse">Ellipse</option>
+        <option value="triangle">Triangle</option>
+        <option value="star">Star</option>
+        <option value="polygon">Polygon</option>
+        <option value="fill">Fill</option>
+        <option value="text">Text</option>
+      </select>
+
+      <select id="brushStyle">
+        <option value="solid">Solid</option>
+        <option value="dotted">Dotted</option>
+        <option value="dashed">Dashed</option>
+        <option value="airbrush">Airbrush</option>
+      </select>
+
+      <input type="color" id="color" />
+      <input type="range" id="size" min="1" max="50" value="5" />
+
+      <!-- Text options -->
+      <select id="fontFamily" title="Font">
+        <option value="Arial">Arial</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Courier New">Courier New</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Georgia">Georgia</option>
+      </select>
+      <label><input type="checkbox" id="bold"> Bold</label>
+      <label><input type="checkbox" id="italic"> Italic</label>
+
+      <button id="undo">Undo</button>
+      <button id="redo">Redo</button>
+      <button id="clear">Clear</button>
+      <button id="save">Save</button>
+      <button id="share">Share</button>
+    </div>
+
+    <div class="canvas-wrapper">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

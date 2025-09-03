@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
+    <div class="container">
+        <h1>Student Attendance Recorder</h1>
+
+        <div id="current-date"></div>
+
+        <div class="settings-section">
+            <h2>Organization & Class Info</h2>
+            <label for="organization-name">Organization Name:</label>
+            <input type="text" id="organization-name" value="">
+
+            <label for="class-name">Class Name:</label>
+            <input type="text" id="class-name" value="">
+
+            <label for="class-timing">Class Timing:</label>
+            <input type="text" id="class-timing" value="">
+        </div>
+
+        <div class="student-edit-section" style="display: none;">
+            <h2>Edit Students</h2>
+            <div style="margin-bottom: 15px;">
+                <input type="text" id="add-student-input" placeholder="Enter student name">
+                <button onclick="addStudent()">Add Student</button>
+            </div>
+            <ul class="student-list" id="edit-student-list">
+            </ul>
+        </div>
+
+        <div class="attendance-section">
+            <h2>Today's Attendance</h2>
+            <ul class="student-list" id="attendance-list">
+            </ul>
+        </div>
+
+        <div class="past-attendance-section" style="display: none;">
+            <h2>Past Attendance</h2>
+            <div class="past-attendance-controls">
+                <label for="past-attendance-date">Select Date:</label>
+                <input type="date" id="past-attendance-date">
+                <button onclick="viewPastAttendance()">View Attendance</button>
+            </div>
+            <ul class="student-list past-attendance-list" id="past-attendance-list">
+                </ul>
+        </div>
+
+        <div class="notes-section">
+            <label for="notes">Notes (Topic/Special Remarks):</label>
+            <textarea id="notes" rows="4"></textarea>
+        </div>
+
+        <div class="calendar-section">
+            <h2>Calendar</h2>
+            <div id="calendar">
+            </div>
+            <div class="calendar-info">
+                <span style="background-color: #98c379;"></span> Class Day
+                <span style="background-color: #e06c75;"></span> Holiday
+                <span style="background-color: #5c6370;"></span> No Class
+            </div>
+        </div>
+
+        <div class="export-section">
+            <h2>Export Attendance</h2>
+            <label for="export-start-date">Start Date:</label>
+            <input type="date" id="export-start-date">
+
+            <label for="export-end-date">End Date:</label>
+            <input type="date" id="export-end-date">
+
+            <button onclick="exportAttendanceToExcel()">Export to Excel</button>
+        </div>
+
+        <div class="button-group">
+            <button onclick="toggleSettings()">Show/Edit Info</button>
+            <button onclick="toggleStudentEdit()">Edit Students</button>
+            <button onclick="togglePastAttendance()">View Past Attendance</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

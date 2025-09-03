@@ -1,0 +1,325 @@
+:root {
+    /* Color Palette */
+    --primary-color: #1a73e8; /* Blue for primary actions/highlights */
+    --primary-dark: #155cb7;
+    --secondary-color: #28a745; /* Green for success/affirmative */
+    --secondary-dark: #218838;
+    --accent-color: #f0ad4e; /* Orange for warnings/attention */
+    --neutral-light: #f8f9fa; /* Light background */
+    --neutral-medium: #e9ecef; /* Slightly darker background */
+    --text-dark: #343a40; /* Dark text */
+    --text-medium: #6c757d; /* Muted text */
+    --border-color: #dee2e6; /* Light border */
+    --danger-color: #dc3545; /* Red for reset/danger */
+    --danger-dark: #c82333;
+
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+
+    /* Font Sizes (base for responsive scaling) */
+    --font-size-base: 16px;
+    --font-size-sm: 0.875rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.5rem;
+    --font-size-2xl: 2rem;
+    --font-size-arabic-base: 2.5em; /* Default large font for Arabic, will be controlled by JS */
+}
+
+/* Base Styles & Typography */
+body {
+    font-family: 'Roboto', sans-serif; /* Modern sans-serif for general text */
+    background-color: var(--neutral-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    color: var(--text-dark);
+    line-height: 1.6;
+    padding: var(--spacing-sm); /* Padding for very small screens */
+    box-sizing: border-box; /* Include padding in element's total width and height */
+}
+
+.container {
+    background-color: #fff;
+    padding: var(--spacing-lg) var(--spacing-md); /* Responsive padding */
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%; /* Full width on small screens */
+    max-width: 650px; /* Max width for larger screens */
+    box-sizing: border-box;
+}
+
+h1 {
+    font-family: 'Amiri', serif;
+    color: var(--primary-dark);
+    margin-bottom: var(--spacing-xl);
+    font-size: var(--font-size-2xl);
+}
+
+/* Controls Section (Navigation & Font Size) */
+.controls {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-sm); /* Space between items */
+    margin-bottom: var(--spacing-lg);
+}
+
+.controls button {
+    flex-grow: 1; /* Allow buttons to grow */
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 18px; /* Larger tap targets */
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    min-width: 120px; /* Ensure buttons are not too small */
+}
+
+.controls button:hover {
+    background-color: var(--primary-dark);
+}
+
+.controls button:active {
+    transform: translateY(1px);
+}
+
+.font-size-controls {
+    display: flex;
+    gap: var(--spacing-xs);
+    flex-grow: 0; /* Don't let font size controls grow too much */
+}
+
+.font-size-controls .font-btn {
+    background-color: var(--secondary-color);
+    padding: 10px 15px; /* Slightly smaller for font buttons */
+    font-size: var(--font-size-lg); /* Make A-/A+ prominent */
+    min-width: unset; /* Override min-width from parent */
+    flex-grow: 0;
+}
+
+.font-size-controls .font-btn:hover {
+    background-color: var(--secondary-dark);
+}
+
+/* Azkaar Display Section */
+.azkaar-display {
+    background-color: var(--neutral-medium);
+    border: 1px solid var(--border-color);
+    padding: var(--spacing-lg);
+    border-radius: 10px;
+    margin-bottom: var(--spacing-xl);
+}
+
+.arabic {
+    font-family: 'Amiri', serif;
+    font-size: var(--font-size-arabic-base); /* Controlled by JS, but set base */
+    margin-bottom: var(--spacing-md);
+    line-height: 1.8; /* Increased line height for readability */
+    direction: rtl; /* Important for right-to-left script */
+    text-align: center;
+    font-weight: 700; /* Bold Arabic text */
+    color: var(--text-dark);
+    word-break: break-word; /* Prevent long words from overflowing */
+}
+
+.recitation-info {
+    font-size: var(--font-size-lg);
+    color: var(--text-medium);
+    font-weight: 500;
+}
+
+/* Counter Section */
+.counter-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.counter-circle {
+    width: 160px; /* Larger tap target */
+    height: 160px; /* Larger tap target */
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4em; /* Very large for counter */
+    font-weight: bold;
+    margin-bottom: var(--spacing-lg);
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    user-select: none; /* Prevent text selection on tap */
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+}
+
+.counter-circle:hover {
+    background-color: var(--primary-dark);
+}
+
+.counter-circle:active {
+    transform: scale(0.98);
+    background-color: var(--primary-dark);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.action-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    width: 100%; /* Full width button */
+    max-width: 280px; /* Limit max width for desktop */
+    margin-top: var(--spacing-sm); /* Space between buttons */
+}
+
+.action-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+.action-btn:active {
+    transform: translateY(1px);
+}
+
+#resetBtn {
+    background-color: var(--danger-color);
+}
+
+#resetBtn:hover {
+    background-color: var(--danger-dark);
+}
+
+.secondary-btn {
+    background-color: var(--text-medium);
+}
+
+.secondary-btn:hover {
+    background-color: #5a6268;
+}
+
+/* Hadith Details Section */
+.hadith-details {
+    background-color: var(--neutral-medium);
+    border: 1px solid var(--border-color);
+    padding: var(--spacing-md);
+    border-radius: 10px;
+    margin-top: var(--spacing-lg);
+    text-align: right; /* Align hadith text to the right for RTL */
+    color: var(--text-dark);
+    line-height: 1.7;
+    font-size: var(--font-size-md);
+}
+
+.hadith-details h3 {
+    margin-top: 0;
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-dark);
+    font-family: 'Amiri', serif;
+    font-size: var(--font-size-xl);
+}
+
+.hidden {
+    display: none;
+}
+
+/* Media Queries for smaller screens */
+@media (max-width: 600px) {
+    .container {
+        padding: var(--spacing-lg) var(--spacing-sm); /* More padding on sides for smaller screens */
+        border-radius: 0; /* Full width, no border radius for seamless look on very small devices */
+        box-shadow: none; /* No shadow for full-width layout */
+    }
+
+    h1 {
+        font-size: 1.8rem;
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .controls {
+        flex-direction: column; /* Stack controls vertically */
+        gap: var(--spacing-md); /* More space between stacked items */
+    }
+
+    .controls button {
+        width: 100%; /* Full width for navigation buttons */
+        max-width: unset; /* Remove max-width constraint */
+        padding: 15px 18px; /* Even larger tap target for main buttons */
+        font-size: var(--font-size-lg);
+    }
+
+    .font-size-controls {
+        width: 100%; /* Full width for font controls */
+        justify-content: center; /* Center them */
+        gap: var(--spacing-md);
+    }
+
+    .font-size-controls .font-btn {
+        padding: 12px 20px;
+        font-size: var(--font-size-xl);
+    }
+
+    .azkaar-display {
+        padding: var(--spacing-md);
+    }
+
+    .arabic {
+        font-size: 2em; /* Slightly smaller Arabic font on small screens */
+        margin-bottom: var(--spacing-md);
+    }
+
+    .recitation-info {
+        font-size: var(--font-size-md);
+    }
+
+    .counter-circle {
+        width: 140px; /* Slightly smaller on very small screens */
+        height: 140px;
+        font-size: 3.5em;
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .action-btn {
+        padding: 15px 25px; /* Larger tap targets */
+        font-size: var(--font-size-lg);
+    }
+
+    .hadith-details {
+        padding: var(--spacing-md);
+    }
+}
+
+/* Media Query for very small phones (e.g., iPhone SE) */
+@media (max-width: 375px) {
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    .arabic {
+        font-size: 1.8em;
+    }
+
+    .counter-circle {
+        width: 120px;
+        height: 120px;
+        font-size: 3em;
+    }
+}

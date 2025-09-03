@@ -1,0 +1,491 @@
+body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1rem; /* Add some padding for smaller screens */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+
+        /* Custom scrollbar for game log, if it gets long */
+        .game-log-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .game-log-container::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 4px;
+        }
+        .game-log-container::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+        .game-log-container::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* Responsive board sizing */
+        .game-board-container {
+            width: 100%;
+            max-width: 800px; /* Max width for larger screens */
+            aspect-ratio: 1 / 1; /* Keep it square */
+        }
+
+        .game-board {
+            display: grid;
+            /* Adjusted to 9x9 for 32 cells (8 per side including corners) */
+            grid-template-columns: repeat(9, 1fr);
+            grid-template-rows: repeat(9, 1fr);
+            width: 100%;
+            height: 100%;
+            border: 4px solid #4a5568; /* Darker border for the board */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-radius: 1rem; /* Rounded corners for the board */
+            overflow: hidden; /* Ensure cells stay within bounds */
+        }
+
+        .board-cell {
+            background-color: #cbd5e0; /* Light gray for cells */
+            border: 1px solid #a0aec0; /* Slightly darker border for cells */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 0.75rem; /* Smaller font for cell text */
+            padding: 0.25rem;
+            box-sizing: border-box; /* Include padding in cell's total width/height */
+            position: relative; /* For player tokens and property info */
+        }
+
+        /* Specific styling for corner cells */
+        .corner-cell {
+            background-color: #a0aec0; /* Different background for corners */
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+
+        /* Property color bar */
+        .property-color-bar {
+            width: 100%;
+            height: 8px; /* Thinner bar */
+            border-radius: 2px 2px 0 0; /* Rounded top corners */
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Player tokens container within cell */
+        .player-tokens-container {
+            position: absolute;
+            bottom: 0.1rem; /* Adjusted for smaller padding */
+            right: 0.1rem; /* Adjusted for smaller padding */
+            display: flex;
+            flex-wrap: wrap; /* Allow tokens to wrap if too many */
+            gap: 0.1rem; /* Small gap between tokens */
+            justify-content: flex-end; /* Align to bottom right */
+            align-items: flex-end;
+            width: 100%; /* Take full width to allow wrapping */
+            height: auto; /* Allow height to adjust */
+            padding: 0.1rem; /* Small padding inside container */
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        /* Player token styling */
+        .player-token {
+            width: 1rem; /* Smaller tokens */
+            height: 1rem; /* Smaller tokens */
+            border-radius: 50%;
+            border: 1px solid white; /* Thinner border for smaller tokens */
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Smaller shadow */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.6rem; /* Smaller font for number */
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0; /* Prevent tokens from shrinking */
+        }
+
+
+        /* Player token colors (example) */
+        .player-token-0 { background-color: #ef4444; } /* Red */
+        .player-token-1 { background-color: #3b82f6; } /* Blue */
+        .player-token-2 { background-color: #22c55e; } /* Green */
+        .player-token-3 { background-color: #f59e0b; } /* Orange */
+
+        /* Owner indicator */
+        .owner-indicator {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 6px; /* Thinner bar for ownership */
+            border-radius: 0 0 2px 2px; /* Rounded bottom corners */
+            z-index: 5; /* Below tokens, above cell content */
+        }
+
+        /* Property houses/hotels container */
+        .property-houses-container {
+            position: absolute;
+            bottom: 6px; /* Above the owner indicator */
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 1px;
+            z-index: 6; /* Above owner, below tokens */
+            padding-bottom: 2px;
+        }
+
+        .house-symbol {
+            font-size: 0.7rem;
+            line-height: 1;
+            color: #22c55e; /* Green for houses */
+            text-shadow: 0 0 2px rgba(0,0,0,0.2);
+        }
+
+        .hotel-symbol {
+            font-size: 0.9rem;
+            line-height: 1;
+            color: #ef4444; /* Red for hotel */
+            text-shadow: 0 0 2px rgba(0,0,0,0.2);
+        }
+
+
+        /* Center area for game info */
+        .center-area {
+            grid-column: 2 / 9; /* Adjusted for 9x9 grid */
+            grid-row: 2 / 9; /* Adjusted for 9x9 grid */
+            background-color: #e2e8f0; /* Lighter background for center */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+            z-index: 5; /* Below tokens */
+        }
+
+        /* Dice styling */
+        .dice-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .die {
+            width: 3rem;
+            height: 3rem;
+            background-color: #f8fafc; /* White die */
+            border: 2px solid #4a5568;
+            border-radius: 0.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4a5568;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1-px rgba(0, 0, 0, 0.06);
+            transition: transform 0.1s ease-out; /* For shake animation */
+        }
+
+        .die.shake {
+            animation: shake 0.2s ease-in-out infinite alternate;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0) rotate(0); }
+            25% { transform: translateX(-2px) rotate(-1deg); }
+            50% { transform: translateX(0) rotate(0); }
+            75% { transform: translateX(2px) rotate(1deg); }
+            100% { transform: translateX(0) rotate(0); }
+        }
+
+        /* Button styling */
+        .action-button {
+            background-color: #4f46e5; /* Indigo */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .action-button:hover {
+            background-color: #4338ca; /* Darker indigo on hover */
+            transform: translateY(-1px);
+        }
+
+        .action-button:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
+
+        .action-button:disabled {
+            background-color: #9ca3af; /* Gray out disabled buttons */
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Player info display */
+        .player-info-card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease; /* For active player highlight */
+        }
+
+        .player-info-card.active-player {
+            border: 2px solid #4f46e5; /* Highlight active player */
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2), 0 2px 4px -1px rgba(79, 70, 229, 0.1);
+        }
+
+        .player-info-card.bankrupt {
+            opacity: 0.5;
+            text-decoration: line-through;
+            background-color: #fef2f2; /* Light red for bankrupt players */
+            border-color: #ef4444;
+        }
+
+        .player-info-color {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Money text animation */
+        .money-flash-green {
+            animation: moneyFlashGreen 0.5s ease-out;
+        }
+        .money-flash-red {
+            animation: moneyFlashRed 0.5s ease-out;
+        }
+
+        @keyframes moneyFlashGreen {
+            0% { color: #22c55e; font-size: 1rem; }
+            50% { color: #16a34a; font-size: 1.1rem; }
+            100% { color: #22c55e; font-size: 1rem; }
+        }
+        @keyframes moneyFlashRed {
+            0% { color: #ef4444; font-size: 1rem; }
+            50% { color: #dc2626; font-size: 1.1rem; }
+            100% { color: #ef4444; font-size: 1rem; }
+        }
+
+
+        /* Game log */
+        .game-log-container {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            width: 100%;
+            max-height: 150px; /* Limit height for scrollability */
+            overflow-y: auto;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+
+        .game-log-entry {
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            color: #4a5568;
+        }
+
+        /* Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            max-height: 80vh; /* Limit height for rules modal */
+            overflow-y: auto; /* Enable scrolling for rules */
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-content h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1a202c;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content p {
+            font-size: 1rem;
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+        }
+        .modal-content ul {
+            text-align: left;
+            margin-bottom: 1.5rem;
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            color: #4a5568;
+        }
+        .modal-content ul li {
+            margin-bottom: 0.5rem;
+        }
+        .modal-content input[type="text"] {
+            border: 1px solid #cbd5e0;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .modal-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-button.primary {
+            background-color: #4f46e5;
+            color: white;
+        }
+
+        .modal-button.primary:hover {
+            background-color: #4338ca;
+        }
+
+        .modal-button.secondary {
+            background-color: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .modal-button.secondary:hover {
+            background-color: #cbd5e0;
+        }
+        .modal-button.danger {
+            background-color: #ef4444;
+            color: white;
+        }
+        .modal-button.danger:hover {
+            background-color: #dc2626;
+        }
+
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                padding: 0.5rem;
+            }
+
+            .game-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .game-board-container {
+                max-width: 95vw; /* Use more width on smaller screens */
+                margin-bottom: 1rem;
+            }
+
+            .board-cell {
+                font-size: 0.6rem; /* Even smaller font for tiny screens */
+                padding: 0.1rem;
+            }
+
+            .player-token {
+                width: 0.8rem; /* Even smaller tokens for very small screens */
+                height: 0.8rem;
+                font-size: 0.5rem;
+            }
+
+            .dice-container {
+                gap: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .die {
+                width: 2.5rem;
+                height: 2.5rem;
+                font-size: 1.5rem;
+            }
+
+            .action-button {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .player-info-card {
+                font-size: 0.8rem;
+                padding: 0.5rem 0.8rem;
+            }
+
+            .game-log-container {
+                max-height: 100px;
+                padding: 0.8rem;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
+            }
+
+            .modal-content h3 {
+                font-size: 1.2rem;
+            }
+
+            .modal-content p {
+                font-size: 0.9rem;
+            }
+
+            .modal-button {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }

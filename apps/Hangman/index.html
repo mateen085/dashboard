@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
+    <div class="container">
+        <h1>Hangman</h1>
+
+        <div id="input-area">
+            <div class="input-section">
+                <label for="word-list">Enter Words (and Optional Hints):</label>
+                <textarea id="word-list" placeholder="e.g.,&#10;javascript :: A popular web language&#10;apple :: A common fruit&#10;moon (word only, no custom hint)" aria-label="Word list input area"></textarea>
+                <p class="textarea-instruction">Format: one entry per line. For custom hint, use 'word :: hint'.</p>
+                
+                <label for="new-list-name">Save Current Textarea List As:</label>
+                <input type="text" id="new-list-name" placeholder="Enter list name (e.g., My Favorite Words)">
+                <button id="save-list-btn">Save List</button>
+            </div>
+
+            <div id="sample-lists-area" class="input-section">
+                <p>Load a Sample List (populates textarea):</p>
+                </div>
+
+            <div id="saved-lists-management" class="input-section">
+                <p>Manage Your Saved Lists:</p>
+                <div id="saved-lists-container">
+                    <p style="text-align:center; color: #777;">No custom lists saved yet.</p>
+                </div>
+            </div>
+            <button id="start-game-btn">Start Game with Words in Textarea</button>
+        </div>
+
+        <div id="game-area" class="hidden">
+            <div id="hangman-drawing" aria-label="Hangman drawing status">
+                <div class="hangman-gallow" id="gallow-stand"></div>
+                <div class="hangman-gallow" id="gallow-top"></div>
+                <div class="hangman-gallow" id="gallow-rope"></div>
+                <div class="hangman-body-part" id="head"></div>
+                <div class="hangman-body-part" id="body-line"></div>
+                <div class="hangman-body-part" id="left-arm"></div>
+                <div class="hangman-body-part" id="right-arm"></div>
+                <div class="hangman-body-part" id="left-leg"></div>
+                <div class="hangman-body-part" id="right-leg"></div>
+            </div>
+            <div id="word-display" aria-live="polite"></div>
+            <div id="hint-display" aria-live="polite"></div>
+            <div id="letters-guessed">Incorrect Guesses: <span></span></div>
+            <div id="alphabet-buttons" role="group" aria-label="Alphabet letter guess buttons"></div>
+            <div id="game-status" aria-live="assertive"></div>
+            <button id="hint-btn" class="secondary">Use Hint</button>
+            <button id="play-again-btn" class="hidden secondary">Play Again (New Word)</button>
+            <button id="back-to-setup-btn" class="secondary">Back to List Setup</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

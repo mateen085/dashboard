@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misspelled Words</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
+    <div class="container">
+        <h1>Misspelled Words</h1>
+        <div id="high-score-area">High Score: <span id="high-score">0</span></div>
+
+        <div id="settings-area">
+            <h2>Game Settings</h2>
+            <label for="timer-duration">Timer Duration (seconds):</label>
+            <input type="number" id="timer-duration" value="15" min="5">
+        </div>
+
+        <div id="input-area">
+            <label for="word-list">Enter your correctly spelled word list (one word per line, min 5 characters recommended):</label>
+            <textarea id="word-list" placeholder="e.g.,&#10;separate&#10;definitely&#10;occurrence&#10;conscience&#10;accommodation"></textarea>
+        </div>
+
+        <button id="start-game-btn">Start Game</button>
+
+        <div class="sample-lists">
+            <h2>Practice Lists</h2>
+            <button class="practice-list-btn secondary" data-list="common">Commonly Misspelled Words</button>
+            <button class="practice-list-btn secondary" data-list="difficult">Difficult English Words</button>
+        </div>
+
+        <div id="customize-list-options">
+            <h2>Customize / Save / Load List</h2>
+            <label for="save-list-name">Save List As:</label>
+            <input type="text" id="save-list-name" placeholder="My Custom List">
+            <button id="save-list-btn" class="secondary">Save List</button>
+
+            <label for="saved-lists">Load Saved List:</label>
+            <select id="saved-lists">
+                <option value="">-- Select a List --</option>
+            </select>
+            <button id="load-list-btn" class="secondary">Load List</button>
+            <button id="delete-list-btn" class="secondary">Delete List</button>
+        </div>
+
+        <div id="game-area" class="hidden">
+            <div id="timer-area">Time Left: <span id="timer"></span> seconds</div>
+            <div id="word-display"></div>
+            <div id="options-container">
+                </div>
+            <div id="feedback"></div>
+            <div id="hint-area" class="hidden">Hint: <span id="hint"></span></div>
+            <div id="score-area">Score: <span id="score">0</span> | Attempt: <span id="attempt-number">0</span>/<span id="total-attempts">0</span></div>
+            <button id="next-word-btn" class="hidden secondary">Next Question</button>
+            <button id="get-hint-btn" class="secondary">Show Hint</button>
+            <button id="restart-game-btn" class="secondary">Restart Game</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

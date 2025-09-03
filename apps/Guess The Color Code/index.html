@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess The Color Code</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e2e8f0; /* Light gray-blue background */
+        }
+        .color-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 9999px; /* Full rounded for circles */
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .color-box:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .color-box.selected {
+            border: 3px solid #3b82f6; /* Blue border for selected */
+            box-shadow: 0 0 0 4px #bfdbfe; /* Light blue glow */
+        }
+        .feedback-peg {
+            width: 15px;
+            height: 15px;
+            border-radius: 9999px;
+            margin: 2px;
+            background-color: #e5e7eb; /* Light gray for empty */
+        }
+        .feedback-peg.black {
+            background-color: #1f2937; /* Dark for correct color & position */
+        }
+        .feedback-peg.white {
+            background-color: #fca5a5; /* Red for correct color, wrong position */
+        }
+        .feedback-peg.empty {
+            background-color: #e5e7eb; /* Light gray for empty slots */
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .scale-up {
+            animation: scaleUp 0.3s ease-out;
+        }
+        @keyframes scaleUp {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        /* Custom scrollbar for guess history */
+        .scrollable-history::-webkit-scrollbar {
+            width: 8px;
+        }
+        .scrollable-history::-webkit-scrollbar-track {
+            background: #cbd5e1; /* gray-300 */
+            border-radius: 4px;
+        }
+        .scrollable-history::-webkit-scrollbar-thumb {
+            background: #94a3b8; /* gray-400 */
+            border-radius: 4px;
+        }
+        .scrollable-history::-webkit-scrollbar-thumb:hover {
+            background: #64748b; /* gray-500 */
+        }
+
+        /* Custom scrollbar for rules modal */
+        .scrollable-modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .scrollable-modal-content::-webkit-scrollbar-track {
+            background: #cbd5e1; /* gray-300 */
+            border-radius: 4px;
+        }
+        .scrollable-modal-content::-webkit-scrollbar-thumb {
+            background: #94a3b8; /* gray-400 */
+            border-radius: 4px;
+        }
+        .scrollable-modal-content::-webkit-scrollbar-thumb:hover {
+            background: #64748b; /* gray-500 */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 bg-gray-200">
+<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
+    <div id="game-container" class="bg-white p-6 md:p-8 rounded-xl shadow-2xl w-full max-w-sm md:max-w-md lg:max-w-xl text-center flex flex-col items-center border border-gray-300">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-blue-600 mb-6 drop-shadow-md">Guess The Color Code</h1>
+
+        <!-- Level Selection -->
+        <div id="level-selection" class="mb-8 w-full">
+            <h2 class="text-xl md:text-2xl font-semibold text-gray-800 mb-4">Choose Your Challenge</h2>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <button id="easy-btn" class="level-btn bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-green-300 transform hover:scale-105">Easy</button>
+                <button id="medium-btn" class="level-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-300 transform hover:scale-105">Medium</button>
+                <button id="hard-btn" class="level-btn bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-red-300 transform hover:scale-105">Hard</button>
+            </div>
+            <!-- Rules Button added here -->
+            <button id="rules-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-5 rounded-full mt-6 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-gray-300 transform hover:scale-105 text-md">Game Rules</button>
+        </div>
+
+        <!-- Game Area -->
+        <div id="game-area" class="w-full hidden flex flex-col items-center flex-grow">
+            <p id="attempts-left" class="text-lg font-medium text-gray-700 mb-4">Attempts Left: <span id="current-attempts">0</span></p>
+
+            <!-- Secret Code (Hidden initially) -->
+            <div class="mb-6 w-full">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">Secret Code:</h3>
+                <div id="secret-code-display" class="flex justify-center gap-2 mb-4">
+                    <!-- Secret color boxes will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Main Game Play Area: Guess Input/Palette (left) & History (right) -->
+            <!-- Changed this container to be flexible and responsive -->
+            <div class="flex flex-col md:flex-row w-full justify-center gap-4 flex-grow">
+                <!-- Left Section: Current Guess & Color Palette -->
+                <div class="w-full md:w-1/2 flex flex-col items-center p-4 rounded-xl bg-blue-50 shadow-inner border border-blue-200 mb-4 md:mb-0">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 md:text-2xl">Your Guess:</h3>
+                    <div id="current-guess-slots" class="flex justify-center gap-2 mb-4 p-2 bg-white rounded-lg shadow-inner">
+                        <!-- Guess input slots will be rendered here -->
+                    </div>
+                    <div id="color-palette" class="flex flex-wrap justify-center gap-2 p-3 bg-gray-100 rounded-lg shadow-sm mb-4">
+                        <!-- Color options will be rendered here -->
+                    </div>
+                    <button id="guess-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-all shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-300 transform hover:scale-105 text-lg w-full max-w-[200px]">Guess</button>
+                </div>
+
+                <!-- Right Section: Guesses History -->
+                <!-- Removed max-h-64 to allow flex-grow to manage height. Added min-h-0 for shrinking -->
+                <div class="w-full md:w-1/2 flex flex-col p-4 rounded-xl bg-gray-50 shadow-inner border border-gray-200 overflow-y-auto scrollable-history flex-grow min-h-0">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 sticky top-0 bg-gray-50 pb-2 z-10 md:text-2xl">Past Guesses:</h3>
+                    <div id="guesses-history" class="space-y-4">
+                        <!-- Guesses and feedback will be rendered here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Game Button (always at bottom) -->
+            <button id="new-game-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full transition-all shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-purple-300 transform hover:scale-105 text-lg mt-6 hidden">New Game</button>
+        </div>
+
+        <!-- Game Over/Win Modal -->
+        <div id="game-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+            <div class="bg-white p-8 rounded-xl shadow-2xl text-center w-full max-w-sm scale-up">
+                <h2 id="modal-message" class="text-2xl md:text-3xl font-bold mb-4 text-gray-900"></h2>
+                <div id="modal-secret-code" class="flex justify-center gap-2 mb-6"></div>
+                <button id="modal-close-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition-all shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-300 transform hover:scale-105">Play Again</button>
+            </div>
+        </div>
+
+        <!-- Game Rules Modal (New) -->
+        <div id="rules-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+            <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md scale-up text-left overflow-y-auto max-h-[80vh] scrollable-modal-content">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4 text-blue-600 text-center">How to Play</h2>
+                <ul class="list-disc list-inside space-y-3 text-gray-700 text-md md:text-lg">
+                    <li>The game generates a secret code of unique colors.</li>
+                    <li>Your goal is to guess the secret code within a limited number of attempts.</li>
+                    <li>Select colors from the palette to fill the "Your Guess" slots. You can leave slots empty. Click a filled slot to clear it.</li>
+                    <li>Click the "Guess" button to submit your guess.</li>
+                    <li>You will receive feedback using pegs:
+                        <ul class="list-circle list-inside ml-5 mt-2 space-y-1">
+                            <li><span class="inline-block w-4 h-4 rounded-full bg-black mr-2"></span> **Black Peg:** A color is correct AND in the correct position.</li>
+                            <li><span class="inline-block w-4 h-4 rounded-full bg-red-300 mr-2"></span> **Red Peg:** A color is correct but in the WRONG position.</li>
+                            <li>Empty pegs indicate incorrect colors or no match.</li>
+                        </ul>
+                    </li>
+                    <li>The length of the code and number of attempts vary by difficulty level:
+                        <ul class="list-none ml-5 mt-2 space-y-1">
+                            <li>**Easy:** 4-color code, 8 attempts.</li>
+                            <li>**Medium:** 5-color code, 10 attempts.</li>
+                            <li>**Hard:** 6-color code, 12 attempts.</li>
+                        </ul>
+                    </li>
+                    <li>Good luck!</li>
+                </ul>
+                <div class="text-center mt-6">
+                    <button id="rules-close-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition-all shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-300 transform hover:scale-105">Got It!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global game variables
+        let secretCode = [];
+        let currentGuess = [];
+        let guessesHistory = [];
+        let levelConfig = {};
+        let attemptsLeft = 0;
+        let isGameOver = false;
+
+        // DOM elements
+        const levelSelectionEl = document.getElementById('level-selection');
+        const gameAreaEl = document.getElementById('game-area');
+        const easyBtn = document.getElementById('easy-btn');
+        const mediumBtn = document.getElementById('medium-btn');
+        const hardBtn = document.getElementById('hard-btn');
+        const rulesBtn = document.getElementById('rules-btn'); // New rules button
+        const secretCodeDisplayEl = document.getElementById('secret-code-display');
+        const currentGuessSlotsEl = document.getElementById('current-guess-slots');
+        const colorPaletteEl = document.getElementById('color-palette');
+        const guessBtn = document.getElementById('guess-btn');
+        const guessesHistoryEl = document.getElementById('guesses-history');
+        const attemptsLeftEl = document.getElementById('current-attempts');
+        const newGameBtn = document.getElementById('new-game-btn');
+        const gameModalEl = document.getElementById('game-modal');
+        const modalMessageEl = document.getElementById('modal-message');
+        const modalSecretCodeEl = document.getElementById('modal-secret-code');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const rulesModalEl = document.getElementById('rules-modal'); // New rules modal
+        const rulesCloseBtn = document.getElementById('rules-close-btn'); // New rules close button
+
+        // Game configuration for different levels
+        const LEVELS = {
+            easy: {
+                codeLength: 4,
+                maxAttempts: 8,
+                colors: ['red', 'green', 'blue', 'yellow', 'purple', 'orange']
+            },
+            medium: {
+                codeLength: 5,
+                maxAttempts: 10,
+                colors: ['red', 'green', 'blue', 'yellow', 'purple', 'orange', 'pink']
+            },
+            hard: {
+                codeLength: 6,
+                maxAttempts: 12,
+                colors: ['red', 'green', 'blue', 'yellow', 'purple', 'orange', 'pink', 'teal']
+            }
+        };
+
+        /**
+         * Initializes the game based on the selected level.
+         * @param {string} level - The difficulty level ('easy', 'medium', 'hard').
+         */
+        function initGame(level) {
+            levelConfig = LEVELS[level];
+            // Check if there are enough unique colors for the code length
+            if (levelConfig.colors.length < levelConfig.codeLength) {
+                console.error("Not enough unique colors available for this code length. Please adjust settings.");
+                // Fallback or user notification could be added here
+                alert("Error: Not enough unique colors for this level. Please choose a different level or contact support.");
+                return;
+            }
+            attemptsLeft = levelConfig.maxAttempts;
+            guessesHistory = [];
+            currentGuess = Array(levelConfig.codeLength).fill(null); // Initialize current guess with nulls
+            isGameOver = false;
+
+            generateSecretCode();
+            renderGame(); // Initial render
+            updateAttemptsDisplay();
+
+            // Show game area, hide level selection
+            levelSelectionEl.classList.add('hidden');
+            gameAreaEl.classList.remove('hidden');
+            newGameBtn.classList.add('hidden'); // Hide new game button until game over
+            gameModalEl.classList.add('hidden'); // Hide modal if it was open
+        }
+
+        /**
+         * Generates a random secret code based on the current level configuration,
+         * ensuring that no color is repeated in the code.
+         */
+        function generateSecretCode() {
+            secretCode = [];
+            // Create a temporary mutable copy of available colors to pick from
+            const availableColors = [...levelConfig.colors];
+            for (let i = 0; i < levelConfig.codeLength; i++) {
+                // Pick a random index from the currently available colors
+                const randomIndex = Math.floor(Math.random() * availableColors.length);
+                // Add the color at that index to the secret code
+                secretCode.push(availableColors[randomIndex]);
+                // Remove the chosen color from the available colors to ensure uniqueness
+                availableColors.splice(randomIndex, 1);
+            }
+            // console.log("Secret Code:", secretCode); // For debugging, remove in production
+            renderSecretCode(true); // Render secret code as hidden
+        }
+
+        /**
+         * Renders the secret code display.
+         * @param {boolean} hidden - If true, displays placeholder boxes. If false, displays actual colors.
+         */
+        function renderSecretCode(hidden) {
+            secretCodeDisplayEl.innerHTML = '';
+            const codeToDisplay = hidden ? Array(levelConfig.codeLength).fill('gray') : secretCode; // Use 'gray' for hidden placeholder
+            codeToDisplay.forEach(color => {
+                const div = document.createElement('div');
+                div.className = `w-8 h-8 rounded-full border border-gray-400 ${hidden ? 'bg-gray-300 animate-pulse' : ''} fade-in`;
+                if (!hidden) {
+                    div.style.backgroundColor = color;
+                }
+                secretCodeDisplayEl.appendChild(div);
+            });
+        }
+
+        /**
+         * Renders the current guess input slots.
+         */
+        function renderCurrentGuessSlots() {
+            currentGuessSlotsEl.innerHTML = '';
+            for (let i = 0; i < levelConfig.codeLength; i++) {
+                const div = document.createElement('div');
+                div.className = `w-10 h-10 rounded-full border-2 border-gray-400 flex items-center justify-center cursor-pointer transition-all ${currentGuess[i] ? 'selected' : 'bg-gray-200'}`;
+                if (currentGuess[i]) {
+                    div.style.backgroundColor = currentGuess[i];
+                } else {
+                    div.textContent = (i + 1); // Placeholder for empty slot
+                    div.classList.add('text-gray-500', 'font-bold');
+                }
+                div.dataset.slotIndex = i; // Store index for color removal
+                div.addEventListener('click', () => removeColorFromGuess(i));
+                currentGuessSlotsEl.appendChild(div);
+            }
+            // The guess button is now ALWAYS enabled, allowing guesses with empty slots.
+            guessBtn.disabled = false; // Ensure it's always enabled
+            guessBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+
+        /**
+         * Renders the color palette for selection.
+         */
+        function renderColorPalette() {
+            colorPaletteEl.innerHTML = '';
+            levelConfig.colors.forEach(color => {
+                const div = document.createElement('div');
+                div.className = `color-box bg-${color}-500 shadow-md hover:shadow-lg`;
+                div.style.backgroundColor = color; // Explicitly set background color
+                div.dataset.color = color;
+                div.addEventListener('click', () => selectColor(color));
+                colorPaletteEl.appendChild(div);
+            });
+        }
+
+        /**
+         * Selects a color and adds it to the next available slot in the current guess.
+         * @param {string} color - The color selected from the palette.
+         */
+        function selectColor(color) {
+            const emptyIndex = currentGuess.indexOf(null);
+            if (emptyIndex !== -1) {
+                currentGuess[emptyIndex] = color;
+                renderCurrentGuessSlots();
+            }
+        }
+
+        /**
+         * Removes a color from the current guess at a specific index.
+         * @param {number} index - The index of the color to remove.
+         */
+        function removeColorFromGuess(index) {
+            if (currentGuess[index] !== null) {
+                currentGuess[index] = null;
+                // For simplicity, we just nullify it and let the user fill it.
+                renderCurrentGuessSlots();
+            }
+        }
+
+        /**
+         * Updates the attempts left display.
+         */
+        function updateAttemptsDisplay() {
+            attemptsLeftEl.textContent = attemptsLeft;
+            if (attemptsLeft <= 3 && attemptsLeft > 0) {
+                attemptsLeftEl.classList.add('text-red-500', 'font-bold', 'scale-up');
+            } else {
+                attemptsLeftEl.classList.remove('text-red-500', 'font-bold', 'scale-up');
+            }
+        }
+
+        /**
+         * Makes a guess, provides feedback, and checks for win/loss conditions.
+         */
+        function makeGuess() {
+            attemptsLeft--;
+            updateAttemptsDisplay();
+
+            const feedback = calculateFeedback(currentGuess, secretCode);
+            guessesHistory.push({ guess: [...currentGuess], feedback: feedback }); // Store a copy of the guess
+
+            renderGuessesHistory(); // Update history display
+
+            // Check for win condition
+            if (feedback.blackPegs === levelConfig.codeLength) {
+                isGameOver = true;
+                showModal('Congratulations! You cracked the code!', 'win');
+                newGameBtn.classList.remove('hidden');
+            } else if (attemptsLeft <= 0) {
+                isGameOver = true;
+                showModal('Game Over! You ran out of attempts.', 'lose');
+                newGameBtn.classList.remove('hidden');
+            }
+
+            // Reset current guess for next attempt if game is not over
+            if (!isGameOver) {
+                currentGuess = Array(levelConfig.codeLength).fill(null);
+                renderCurrentGuessSlots();
+            } else {
+                // Disable guess button when game is over
+                guessBtn.disabled = true;
+                guessBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        /**
+         * Calculates feedback (black and white pegs) for a given guess.
+         * Black peg: Correct color and correct position.
+         * White peg: Correct color but wrong position.
+         * @param {Array<string>} guess - The user's guess.
+         * @param {Array<string>} secret - The secret code.
+         * @returns {{blackPegs: number, whitePegs: number}} - Number of black and white pegs.
+         */
+        function calculateFeedback(guess, secret) {
+            let blackPegs = 0;
+            let whitePegs = 0;
+            const secretCopy = [...secret]; // Create mutable copy
+            const guessCopy = [...guess];   // Create mutable copy
+
+            // First pass: Find black pegs (exact matches)
+            for (let i = 0; i < levelConfig.codeLength; i++) {
+                // Check if both guess and secret have a color at this position and they match
+                if (guessCopy[i] !== null && guessCopy[i] === secretCopy[i]) {
+                    blackPegs++;
+                    secretCopy[i] = null; // Mark as used
+                    guessCopy[i] = null;  // Mark as used
+                }
+            }
+
+            // Second pass: Find white pegs (color matches, wrong position)
+            for (let i = 0; i < levelConfig.codeLength; i++) {
+                if (guessCopy[i] !== null) { // If not already matched as a black peg and it's not an empty slot
+                    const secretIndex = secretCopy.indexOf(guessCopy[i]);
+                    if (secretIndex !== -1) {
+                        whitePegs++;
+                        secretCopy[secretIndex] = null; // Mark as used
+                    }
+                }
+            }
+
+            return { blackPegs, whitePegs };
+        }
+
+        /**
+         * Renders the history of guesses and their feedback.
+         */
+        function renderGuessesHistory() {
+            guessesHistoryEl.innerHTML = '';
+            guessesHistory.forEach((entry, index) => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'flex items-center justify-between p-3 bg-white rounded-lg shadow-sm mb-3 fade-in border border-gray-200';
+
+                // Guess colors
+                const guessColorsDiv = document.createElement('div');
+                guessColorsDiv.className = 'flex gap-1';
+                entry.guess.forEach(color => {
+                    const div = document.createElement('div');
+                    div.className = 'w-6 h-6 rounded-full border border-gray-300';
+                    // Render empty slots with a light gray background
+                    div.style.backgroundColor = color === null ? '#e5e7eb' : color;
+                    guessColorsDiv.appendChild(div);
+                });
+                historyItem.appendChild(guessColorsDiv);
+
+                // Feedback pegs
+                const feedbackDiv = document.createElement('div');
+                feedbackDiv.className = 'flex flex-wrap w-24 justify-end items-center gap-1';
+                for (let i = 0; i < entry.feedback.blackPegs; i++) {
+                    const peg = document.createElement('div');
+                    peg.className = 'feedback-peg black';
+                    feedbackDiv.appendChild(peg);
+                }
+                for (let i = 0; i < entry.feedback.whitePegs; i++) {
+                    const peg = document.createElement('div');
+                    peg.className = 'feedback-peg white';
+                    feedbackDiv.appendChild(peg);
+                }
+                // Fill remaining slots with empty pegs for visual consistency
+                const totalPegs = entry.feedback.blackPegs + entry.feedback.whitePegs;
+                for (let i = 0; i < levelConfig.codeLength - totalPegs; i++) {
+                     const peg = document.createElement('div');
+                     peg.className = 'feedback-peg empty';
+                     feedbackDiv.appendChild(peg);
+                }
+                historyItem.appendChild(feedbackDiv);
+
+                guessesHistoryEl.prepend(historyItem); // Add to the top for reverse chronological order
+            });
+            // Ensure the scrollbar is visible and scrolls to the top for new entries
+            if (guessesHistoryEl.firstElementChild) {
+                guessesHistoryEl.firstElementChild.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        /**
+         * Renders the entire game UI.
+         */
+        function renderGame() {
+            renderCurrentGuessSlots();
+            renderColorPalette();
+            renderGuessesHistory();
+            updateAttemptsDisplay();
+        }
+
+        /**
+         * Displays a modal message (win/lose).
+         * @param {string} message - The message to display.
+         * @param {string} type - 'win', 'lose', or 'error' (for styling).
+         */
+        function showModal(message, type) {
+            modalMessageEl.textContent = message;
+            modalSecretCodeEl.innerHTML = ''; // Clear previous secret code display
+            secretCode.forEach(color => {
+                const div = document.createElement('div');
+                div.className = 'w-8 h-8 rounded-full border border-gray-400';
+                div.style.backgroundColor = color;
+                modalSecretCodeEl.appendChild(div);
+            });
+
+            // Set message color based on type
+            if (type === 'win') {
+                modalMessageEl.classList.remove('text-red-600');
+                modalMessageEl.classList.add('text-green-600');
+            } else if (type === 'lose') {
+                modalMessageEl.classList.remove('text-green-600');
+                modalMessageEl.classList.add('text-red-600');
+            } else { // error
+                 modalMessageEl.classList.remove('text-green-600', 'text-red-600');
+                 modalMessageEl.classList.add('text-gray-900');
+            }
+
+            gameModalEl.classList.remove('hidden');
+        }
+
+        /**
+         * Hides the game over modal and resets the game for a new round.
+         */
+        function hideGameModalAndStartNewGame() {
+            gameModalEl.classList.add('hidden');
+            // Show level selection again
+            levelSelectionEl.classList.remove('hidden');
+            gameAreaEl.classList.add('hidden');
+            newGameBtn.classList.add('hidden'); // Ensure hidden
+            guessBtn.disabled = false; // Re-enable guess button
+            guessBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+
+        /**
+         * Shows the game rules modal.
+         */
+        function showRulesModal() {
+            rulesModalEl.classList.remove('hidden');
+        }
+
+        /**
+         * Hides the game rules modal.
+         */
+        function hideRulesModal() {
+            rulesModalEl.classList.add('hidden');
+        }
+
+
+        // Event Listeners
+        easyBtn.addEventListener('click', () => initGame('easy'));
+        mediumBtn.addEventListener('click', () => initGame('medium'));
+        hardBtn.addEventListener('click', () => initGame('hard'));
+        rulesBtn.addEventListener('click', showRulesModal); // Event listener for rules button
+        guessBtn.addEventListener('click', makeGuess);
+        newGameBtn.addEventListener('click', hideGameModalAndStartNewGame);
+        modalCloseBtn.addEventListener('click', hideGameModalAndStartNewGame);
+        rulesCloseBtn.addEventListener('click', hideRulesModal); // Event listener for rules close button
+
+        // New: Event listener to close rules modal on click outside
+        rulesModalEl.addEventListener('click', (event) => {
+            if (event.target === rulesModalEl) { // Check if the click was on the overlay itself
+                hideRulesModal();
+            }
+        });
+
+        // Initial setup - nothing happens until a level is selected
+        // This ensures the game area is hidden until the user picks a level.
+    </script>
+</body>
+</html>
