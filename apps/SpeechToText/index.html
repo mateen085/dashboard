@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8    <meta name="viewport" content="width=device-width, initial-scale=.0">
+    <title>Speech to Text Converter</title>
+    <style>
+        :root {
+            --primary: #4a00e0;
+            --secondary: #8e2de2;
+            --background: #f5f7fa;
+            --text: #333;
+            --light-text: #777;
+            --border: #ddd;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
+            --card-bg: #ffffff;
+            --btn-primary: #4a00e0;
+            --btn-hover: #3a00b0;
+            --btn-disabled: #cccccc;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        h1 {
+            margin-top: 0;
+            font-size: 2.5rem;
+            color: var(--primary);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .supported-languages {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: var(--light-text);
+        }
+        
+        .language-selector {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background-color: var(--card-bg);
+            color: var(--text);
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        
+        #output {
+            width: 100%;
+            min-height: 150px;
+            max-height: 300px;
+            padding: 20px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            text-align: left;
+            margin: 20px 0;
+            box-sizing: border-box;
+            overflow-y: auto;
+            background-color: #ff9f9;
+        }
+        
+        #output:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0  0 2px rgba(74, 0, 224, 0.2);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            border: none            border-radius: 50px;
+            cursor: pointer;
+            background: var(--btn-primary);
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+        }
+        
+        button:hover {
+            background: var(--btn-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        button:disabled {
+            background: var(--btn-disabled);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        #stop {
+            background: var(--error);
+        }
+        
+        #stop:hover {
+            background: #d32f2f;
+        }
+        
+        #clear {
+            background: var(--warning);
+        }
+        
+        #clear:hover {
+            background: #f57c00;
+        }
+        
+        #status {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            min-height: 30px;
+            color: var(--light-text);
+            font-weight: 500;
+        }
+        
+        .history-container {
+            margin-top: 30px;
+            width: 100%;
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .history-header h2 {
+            margin: 0;
+            color: var(--primary);
+        }
+        
+        #clear-history {
+            background: var(--warning);
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            min-width: auto;
+        }
+        
+        #history {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            text-align: left;
+        }
+        
+        .history-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            background-color: #fafafa;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        
+        .history-item:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .timestamp {
+            font-size: 0.85rem;
+            color: var(--light-text);
+            margin-bottom: 8px;
+        }
+        
+        .history-content {
+            font-size: 1.1rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        
+        .delete-btn {
+            float: right;
+            background: var(--error);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+        }
+        
+        .edit-btn {
+            float: right;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .history-controls {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .save-session {
+            background: var(--success);
+        }
+        
+        .save-session:hover {
+            background: #388e3c;
+        }
+        
+        .no-history {
+            padding: 20px;
+            text-align: center;
+            color: var(--light-text);
+        }
+        
+        .recording-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background-color: var(--error);
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .history-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .history-controls button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
+    <div class="container">
+        <h1>🎙️ Speech to Text Converter</h1>
+        
+        <div class="supported-languages">
+            <span>🇺🇸 English</span>
+            <span>🇮🇳 Hindi</span>
+            <span>🇵🇰 Urdu</span>
+            <span>🇮🇳 Telugu</span>
+        </div>
+        
+        <select id="language" class="language-selector">
+            <option value="en-US">English (US)</option>
+            <option value="hi-IN">Hindi (India)</option>
+            <option value="ur-PK">Urdu (Pakistan)</option>
+            <option value="te-IN">Telugu (India)</option>
+        </select>
+        
+        <div id="output" contenteditable="true" placeholder="Your speech will appear here..."></div>
+        
+        <div class="controls">
+            <button id="start">🎙 Start Listening</button>
+            <button id="stop">⏹ Stop Listening</button>
+            <button id="clear">🗑 Clear Current Text</button>
+        </div>
+        
+        <div id="status">Ready to listen...</div>
+        
+        <div class="history-controls">
+            <button id="save-session" class="save-session">💾 Save Current Session</button>
+            <button id="load-sessions">📂 Load Previous Sessions</button>
+        </div>
+        
+        <div class="history-container">
+            <div class="history-header">
+                <h2>📜 Transcription History</h2>
+                <button id="clear-history">🗑 Clear All History</button>
+            </div>
+            <div id="history">
+                <div class="no-history">No transcription history yet. Save a session to see it here.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check for browser support
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        
+        if (!SpeechRecognition) {
+            document.getElementById('status').textContent = 
+                '❌ Speech Recognition is not supported in your browser. Please use Chrome or Edge.';
+            document.getElementById('start').disabled = true;
+            document.getElementById('stop').disabled = true;
+        } else {
+            const recognition = new SpeechRecognition();
+            const output = document.getElementById('output');
+            const startBtn = document.getElementById('start');
+            const stopBtn = document.getElementById('stop');
+            const clearBtn = document.getElementById('clear');
+            const saveSessionBtn = document.getElementById('save-session');
+            const loadSessionsBtn = document.getElementById('load-sessions');
+            const clearHistoryBtn = document.getElementById('clear-history');
+            const historyContainer = document.getElementById('history');
+            const languageSelector = document.getElementById('language');
+            const status = document.getElementById('status');
+            
+            let currentTranscript = '';
+            let isListening = false;
+            
+            // Configure recognition
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = languageSelector.value;
+            
+            // Update language when changed
+            languageSelector.addEventListener('change', () => {
+                recognition.lang = languageSelector.value;
+                updateStatus(`Language set to: ${languageSelector.options[languageSelector.selectedIndex].text}`);
+            });
+            
+            // Handle recognition results
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    
+                    if (event.results[i].isFinal) {
+                        currentTranscript += transcript + ' ';
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+                
+                output.innerHTML = currentTranscript + interimTranscript;
+                output.scrollTop = output.scrollHeight;
+            };
+            
+            // Handle recognition errors
+            recognition.onerror = (event) => {
+                updateStatus(`Error occurred: ${event.error}`);
+                stopListening();
+            };
+            
+            // Handle recognition start
+            recognition.onstart = () => {
+                updateStatus('🎤 Listening... <span class="recording-indicator"></span>');
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                isListening = true;
+                output.focus();
+            };
+            
+            // Handle recognition end
+            recognition.onend = () => {
+                if (isListening) {
+                    // Auto-restart if unexpectedly stopped
+                    recognition.start();
+                } else {
+                    updateStatus('⏹ Stopped listening');
+                    stopBtn.disabled = true;
+                    startBtn.disabled = false;
+                }
+            };
+            
+            // Start recognition
+            startBtn.addEventListener('click', () => {
+                currentTranscript = output.innerHTML;
+                recognition.start();
+            });
+            
+            // Stop recognition
+            stopBtn.addEventListener('click', stopListening);
+            
+            // Clear current text
+            clearBtn.addEventListener('click', () => {
+                output.innerHTML = '';
+                currentTranscript = '';
+                updateStatus('Current text cleared');
+            });
+            
+            // Save current session to history
+            saveSessionBtn.addEventListener('click', () => {
+                if (output.innerHTML.trim() === '') {
+                    updateStatus('Nothing to save!');
+                    return;
+                }
+                
+                const sessions = JSON.parse(localStorage.getItem('voiceToTextSessions') || '[]');
+                const newSession = {
+                    id: Date.now(),
+                    timestamp: new Date().toLocaleString(),
+                    language: languageSelector.options[languageSelector.selectedIndex].text,
+                    content: output.innerHTML.trim()
+                };
+                
+                sessions.push(newSession);
+                localStorage.setItem('voiceToTextSessions', JSON.stringify(sessions));
+                
+                output.innerHTML = '';
+                currentTranscript = '';
+                updateStatus('Session saved to history!');
+                loadHistory();
+            });
+            
+            // Load all sessions from history
+            loadSessionsBtn.addEventListener('click', loadHistory);
+            
+            // Clear all history
+            clearHistoryBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to clear all transcription history?')) {
+                    localStorage.removeItem('voiceToTextSessions');
+                    updateStatus('History cleared');
+                    loadHistory();
+                }
+            });
+            
+            // Helper function to update status
+            function updateStatus(message) {
+                status.innerHTML = message;
+            }
+            
+            // Stop listening
+            function stopListening() {
+                isListening = false;
+                recognition.stop();
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+            
+            // Load history from localStorage
+            function loadHistory() {
+                const sessions = JSON.parse(localStorage.getItem('voiceToTextSessions') || '[]');
+                
+                if (sessions.length === 0) {
+                    historyContainer.innerHTML = '<div class="no-history">No transcription history yet. Save a session to see it here.</div>';
+                    return;
+                }
+                
+                let html = '';
+                // Sort by most recent first
+                sessions.sort((a, b) => b.id - a.id);
+                
+                sessions.forEach(session => {
+                    html += `
+                        <div class="history-item" data-id="${session.id}">
+                            <div class="timestamp">
+                                <span class="edit-btn">✏️</span>
+                                <span class="delete-btn">🗑</span>
+                                ${session.timestamp} - ${session.language}
+                            </div>
+                            <div class="history-content">${session.content}</div>
+                        </div>
+                    `;
+                });
+                
+                historyContainer.innerHTML = html;
+                
+                // Add event listeners to delete buttons
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const id = parseInt(this.closest('.history-item').dataset.id);
+                        deleteSession(id);
+                    });
+                });
+                
+                // Add event listeners to edit buttons
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const item = this.closest('.history-item');
+                        const id = parseInt(item.dataset.id);
+                        enableEdit(item, id);
+                    });
+                });
+                
+                // Add event listeners to history items
+                document.querySelectorAll('.history-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const content = this.querySelector('.history-content').textContent;
+                        output.innerHTML = content;
+                        currentTranscript = content;
+                        updateStatus('Loaded session into editor');
+                    });
+                });
+            }
+            
+            // Delete a session
+            function deleteSession(id) {
+                const sessions = JSON.parse(localStorage.getItem('voiceToTextSessions') || '[]');
+                const filteredSessions = sessions.filter(session => session.id !== id);
+                localStorage.setItem('voiceToTextSessions', JSON.stringify(filteredSessions));
+                updateStatus('Session deleted');
+                loadHistory();
+            }
+            
+            // Enable editing for a session
+            function enableEdit(item, id) {
+                const contentDiv = item.querySelector('.history-content');
+                const saveBtn = document.createElement('button');
+                
+                saveBtn.textContent = '💾 Save Changes';
+                saveBtn.className = 'save-session';
+                saveBtn.style.marginTop = '10px';
+                saveBtn.style.marginBottom = '10px';
+                
+                // Make content editable
+                contentDiv.contentEditable = true;
+                contentDiv.style.backgroundColor = '#fff8e1';
+                contentDiv.style.padding = '10px';
+                contentDiv.style.borderRadius = '5px';
+                contentDiv.focus();
+                
+                // Add save button
+                item.appendChild(saveBtn);
+                
+                // Update button behavior to save edits
+                saveBtn.addEventListener('click', () => {
+                    const sessions = JSON.parse(localStorage.getItem('voiceToTextSessions') || '[]');
+                    const index = sessions.findIndex(session => session.id === id);
+                    
+                    if (index !== -1) {
+                        sessions[index].content = contentDiv.textContent.trim();
+                        localStorage.setItem('voiceToTextSessions', JSON.stringify(sessions));
+                        updateStatus('Session updated successfully!');
+                        disableEdit(contentDiv, saveBtn);
+                    }
+                });
+                
+                updateStatus('Editing session... Click outside to cancel or save to confirm');
+            }
+            
+            // Disable editing
+            function disableEdit(contentDiv, saveBtn) {
+                contentDiv.contentEditable = false;
+                contentDiv.style.backgroundColor = 'transparent';
+                contentDiv.style.padding = '0';
+                contentDiv.style.borderRadius = '0';
+                saveBtn.remove();
+            }
+            
+            // Initialize history on load
+            loadHistory();
+        }
+    </script>
+</body>
+</html>
