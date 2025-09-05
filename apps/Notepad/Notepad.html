@@ -5,62 +5,133 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modern Notes App</title>
 <style>
-  :root{
-    --bg-light:#f6f7fb;--bg-dark:#0b0c10;--panel-light:#ffffff;--panel-dark:#12141a;
-    --txt-light:#0f172a;--txt-dark:#e8eef9;--muted-light:#49566e;--muted-dark:#a8b3cf;
-    --radius:14px;--shadow:0 10px 30px rgba(0,0,0,.25);
+  :root {
+    --bg-light:#f6f7fb;--bg-dark:#0b0c10;
+    --panel-light:#ffffff;--panel-dark:#12141a;
+    --txt-light:#0f172a;--txt-dark:#e8eef9;
+    --muted-light:#49566e;--muted-dark:#a8b3cf;
+    --radius:14px;--shadow:0 6px 20px rgba(0,0,0,.2);
+    --accent:#4f46e5;
   }
-  body{margin:0;font-family:system-ui;background:var(--bg);color:var(--txt);}
-  body.light{--bg:var(--bg-light);--panel:var(--panel-light);--txt:var(--txt-light);--muted:var(--muted-light);}
-  body.dark{--bg:var(--bg-dark);--panel:var(--panel-dark);--txt:var(--txt-dark);--muted:var(--muted-dark);}
-  .app{display:flex;height:100vh;gap:12px;padding:12px;}
-  .sidebar{width:260px;background:var(--panel);border-radius:var(--radius);display:flex;flex-direction:column;}
-  .sidebar button{margin:6px;padding:10px;border:none;border-radius:8px;cursor:pointer;background:#ddd;}
-  .list{flex:1;overflow:auto;padding:10px;}
-  .note-card{padding:10px;background:rgba(0,0,0,.05);margin-bottom:8px;border-radius:10px;cursor:pointer;}
-  .main{flex:1;display:flex;flex-direction:column;gap:10px;}
-  .toolbar{display:flex;gap:10px;align-items:center;background:var(--panel);padding:10px;border-radius:var(--radius);}
-  .toolbar button{padding:8px 12px;cursor:pointer;}
-  .editor-area{flex:1;display:grid;grid-template-columns:1.2fr 1fr;gap:10px;}
-  .editor-section{display:flex;flex-direction:column;}
-  #title{width:100%;padding:10px;font-size:18px;margin-bottom:10px;}
-  textarea{flex:1;padding:10px;font-family:monospace;font-size:14px;resize:none;}
-  .preview{padding:14px;background:var(--panel);overflow:auto;border-radius:var(--radius);}
-  .cheatsheet{position:fixed;top:0;right:-400px;width:360px;height:100%;background:var(--panel);box-shadow:var(--shadow);padding:20px;overflow:auto;transition:right 0.3s;border-radius:14px 0 0 14px;z-index:100;}
-  .cheatsheet.open{right:0;}
-  .cheatsheet h3{margin-top:0;}
-  .cheatsheet pre{background:#222;color:#eee;padding:8px;border-radius:8px;overflow-x:auto;}
-  
-  @media(max-width:900px){.editor-area{grid-template-columns:1fr;}.sidebar{display:none;}}
+  body {
+    margin:0;
+    font-family:system-ui, sans-serif;
+    background:var(--bg);
+    color:var(--txt);
+  }
+  body.light {--bg:var(--bg-light);--panel:var(--panel-light);--txt:var(--txt-light);--muted:var(--muted-light);}
+  body.dark  {--bg:var(--bg-dark);--panel:var(--panel-dark);--txt:var(--txt-dark);--muted:var(--muted-dark);}
+
+  /* Topbar */
+  nav.topbar {
+    display:flex;align-items:center;justify-content:space-between;
+    background:var(--panel);
+    padding:12px 16px;
+    box-shadow:var(--shadow);
+    position:sticky;top:0;z-index:1000;
+  }
+  nav .brand {font-weight:bold;font-size:1.2em;cursor:pointer;}
+  nav .hamburger {
+    display:none;flex-direction:column;gap:5px;
+    cursor:pointer;
+  }
+  nav .hamburger span {
+    width:24px;height:3px;background:var(--txt);border-radius:2px;
+  }
+
+  .app {display:flex;height:calc(100vh - 60px);gap:12px;padding:12px;}
+
+  /* Sidebar */
+  .sidebar {
+    width:260px;flex-shrink:0;
+    background:var(--panel);
+    border-radius:var(--radius);
+    display:flex;flex-direction:column;
+    padding:10px;
+    transition:transform .3s ease;
+  }
+  .sidebar button, .sidebar input[type=file] {
+    margin:6px;padding:12px;border:none;border-radius:10px;
+    cursor:pointer;background:#e5e7eb;
+    font-size:0.9em;
+  }
+  .list {flex:1;overflow:auto;padding:10px;}
+  .note-card {
+    padding:10px;background:rgba(0,0,0,.05);
+    margin-bottom:8px;border-radius:10px;cursor:pointer;
+    transition:background .2s;
+  }
+  .note-card:hover {background:rgba(0,0,0,.1);}
+
+  /* Main area */
+  .main {flex:1;display:flex;flex-direction:column;gap:10px;}
+  .toolbar {
+    display:flex;gap:10px;align-items:center;
+    background:var(--panel);padding:10px;border-radius:var(--radius);
+  }
+  .toolbar input {flex:1;padding:10px;font-size:16px;}
+  .toolbar button {
+    padding:8px 14px;border:none;border-radius:10px;
+    background:var(--accent);color:white;font-weight:600;
+    cursor:pointer;transition:background .2s;
+  }
+  .toolbar button:hover {background:#3730a3;}
+
+  .editor-area {flex:1;display:grid;grid-template-columns:1.2fr 1fr;gap:10px;}
+  .editor-section {display:flex;flex-direction:column;}
+  textarea {
+    flex:1;padding:10px;font-family:monospace;font-size:14px;
+    border-radius:var(--radius);border:1px solid #ddd;
+    resize:none;
+  }
+  .preview {
+    padding:14px;background:var(--panel);
+    overflow:auto;border-radius:var(--radius);
+  }
+
+  /* Cheatsheet */
+  .cheatsheet {
+    position:fixed;top:0;right:-400px;width:360px;height:100%;
+    background:var(--panel);box-shadow:var(--shadow);
+    padding:20px;overflow:auto;transition:right .3s;
+    border-radius:14px 0 0 14px;z-index:100;
+  }
+  .cheatsheet.open {right:0;}
+  .cheatsheet h3 {margin-top:0;}
+  .cheatsheet pre {background:#222;color:#eee;padding:8px;border-radius:8px;overflow-x:auto;}
+
+  /* Mobile responsive */
+  @media(max-width:900px){
+    .app {flex-direction:column;}
+    .editor-area {grid-template-columns:1fr;}
+    .sidebar {
+      position:fixed;top:60px;left:0;bottom:0;
+      transform:translateX(-100%);
+      z-index:999;background:var(--panel);
+    }
+    .sidebar.open {transform:translateX(0);}
+    nav .hamburger {display:flex;}
+  }
 </style>
 </head>
 <body class="light">
-<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
-    color: white;
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.5em;
-    cursor: pointer;
-    padding: 10px;
-    position: flex;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    box-sizing: border-box;">
-  QuestApps-Back to Dashboard
+<nav class="topbar">
+  <div class="brand" onclick="window.location.href='../../index.html';">QuestApps</div>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
 </nav>
-<div class="app">
-  <div class="sidebar">
 
+<div class="app">
+  <div class="sidebar" id="sidebar">
     <button id="newNote">New Note</button>
     <button id="exportNotes">Export</button>
-    <input type="file" id="importNotes" accept="application/json" style="margin:6px;" />
+    <input type="file" id="importNotes" accept="application/json" />
     <button id="printPdf">Print PDF</button>
     <button id="themeToggle">Toggle Theme</button>
-    
     <div class="list" id="noteList"></div>
   </div>
+
   <div class="main">
     <div class="toolbar">
       <input id="title" placeholder="Title" />
@@ -78,7 +149,6 @@
 
 <div class="cheatsheet" id="cheatsheet">
   <h3>Markdown Cheatsheet</h3>
-  <p>Here are some common Markdown examples:</p>
   <ul>
     <li><b>Heading</b>: <pre># Heading 1\n## Heading 2</pre></li>
     <li><b>Bold</b>: <pre>**bold text**</pre></li>
@@ -87,12 +157,14 @@
     <li><b>Link</b>: <pre>[title](https://example.com)</pre></li>
   </ul>
 </div>
+
 <script>
 const storageKey='notes-app';
 const $=s=>document.querySelector(s);
 const $$=s=>document.querySelectorAll(s);
 let notes=[],currentId=null;
-const sampleMarkdown = `# Welcome to Notes App\n\n## Features\n- **Bold text** with **double asterisks**\n- *Italic text* with single asterisks\n- Headings using #\n- Lists like this one\n\nEnjoy writing in Markdown!`;
+const sampleMarkdown=`# Welcome\n\n- **Bold**\n- *Italic*`;
+
 function load(){try{notes=JSON.parse(localStorage.getItem(storageKey))||[]}catch{notes=[]}
 if(notes.length===0){createSample();}else{renderList();select(notes[0].id);}}
 function persist(){localStorage.setItem(storageKey,JSON.stringify(notes));}
@@ -111,6 +183,10 @@ $('#printPdf').onclick=()=>{if(notes.length===0)return;const win=window.open('',
 $('#themeToggle').onclick=()=>{document.body.classList.toggle('dark');document.body.classList.toggle('light');};
 
 load();
+
+/* Hamburger menu */
+const hamburger=$('#hamburger');const sidebar=$('#sidebar');
+hamburger.onclick=()=>{sidebar.classList.toggle('open');};
 </script>
 </body>
 </html>
