@@ -1,0 +1,161 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f9f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 15px;
+}
+
+.container {
+  text-align: center;
+  background: #fff;
+  padding: 2rem 3rem;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  max-width: 600px;
+  width: 90%;
+}
+
+button {
+  background: #007BFF;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+#output {
+  margin-top: 20px;
+  padding: 15px;
+  background: #eee;
+  min-height: 100px;
+  border-radius: 5px;
+  white-space: pre-wrap;
+  font-size: 1.1rem;
+  direction: ltr; /* default direction */
+}
+
+#status {
+  margin: 10px 0;
+  font-style: italic;
+  color: gray;
+}
+
+select {
+  font-size: 1rem;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+}
+#savedList {
+  text-align: left;
+  margin-top: 15px;
+  padding-left: 20px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+#savedList li {
+  margin-bottom: 8px;
+  color: #333;
+}
+#savedList li:hover {
+  text-decoration: underline;
+}
+#savedList {
+  text-align: left;
+  margin-top: 15px;
+  padding-left: 0;
+  max-height: 250px;
+  overflow-y: auto;
+  list-style: none;
+}
+
+#savedList li {
+  margin-bottom: 10px;
+  padding: 8px;
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+#savedList button {
+  margin-left: 5px;
+  padding: 3px 8px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#savedList button:hover {
+  opacity: 0.8;
+}
+
+#deleteAllBtn {
+  margin-bottom: 10px;
+  background: #dc3545;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 5px;
+}
+#deleteAllBtn:hover {
+  background: #b52a37;
+}
+#output {
+  margin-top: 20px;
+  padding: 15px;
+  background: #eee;
+  min-height: 150px;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  width: 100%;
+  resize: vertical;
+}
+
+#savedList {
+  text-align: left;
+  margin-top: 15px;
+  padding-left: 0;
+  max-height: 250px;
+  overflow-y: auto;
+  list-style: none;
+}
+
+#savedList li {
+  margin-bottom: 10px;
+  padding: 8px;
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+#savedList button {
+  margin-left: 5px;
+  padding: 3px 8px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#savedList button:hover {
+  opacity: 0.8;
+}
+
+#deleteAllBtn {
+  margin-bottom: 10px;
+  background: #dc3545;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 5px;
+}
+#deleteAllBtn:hover {
+  background: #b52a37;
+}
+

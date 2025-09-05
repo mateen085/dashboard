@@ -3,10 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Voice to Text App</title>
+  <title>Voice to Text</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+<nav onclick="window.location.href='../../index.html';" style="background-color: #333;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;">
+  QuestApps-Back to Dashboard
+</nav>
   <div class="container">
     <h1>🎙️ Voice to Text</h1>
 
@@ -23,11 +38,16 @@
       <button id="startStopBtn">Start Listening</button>
       <button id="pauseResumeBtn" disabled>Pause</button>
       <button id="downloadBtn" disabled>Download Transcript</button>
-      <button id="saveToServerBtn" disabled>Save to Server</button>
+      <button id="saveLocalBtn" disabled>Save Transcript</button>
+      <button id="clearBtn">Clear Text Area</button>
     </div>
 
     <p id="status">Status: Idle</p>
-    <div id="output"></div>
+    <textarea id="output" placeholder="Transcript will appear here..." contenteditable="true"></textarea>
+
+    <h2>📂 Saved Transcripts</h2>
+    <button id="deleteAllBtn">Delete All</button>
+    <ul id="savedList"></ul>
   </div>
 
   <script src="script.js"></script>
